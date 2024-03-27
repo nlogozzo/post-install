@@ -24,7 +24,7 @@ function install_apps_from_repos() {
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
     sudo dnf install https://download.onlyoffice.com/repo/centos/main/noarch/onlyoffice-repo.noarch.rpm -y
-    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it texlive-scheme-full texstudio flatpak-builder -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it texlive-scheme-full texstudio flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions -y --allowerasing
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel jsoncpp-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel blas-devel lapack-devel fftw-devel libidn-devel libxml2-devel mm-devel -y --allowerasing
     pip install yt-dlp psutil requirements-parser
@@ -60,18 +60,21 @@ function configure_user() {
 function configure_system() {
     echo "===Configuring System==="
     sleep 1
-    # Remove firefox fedora defaults
-    echo "Removing Firefox Fedora defaults..."
-    sudo rm -f /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js
     # Enable and start services
     echo "Enabling and starting services..."
     sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
+    # Remove firefox fedora defaults
+    echo "Removing Firefox Fedora defaults..."
+    sudo rm -f /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js
+    sudo mkdir -p /etc/dnf/plugins/post-transaction-actions.d/
+    sudo touch /etc/dnf/plugins/post-transaction-actions.d/firefox-fedora-defaults-remove.action
+    echo "firefox:any:sudo rm -f /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js" | sudo tee -a /etc/dnf/plugins/post-transaction-actions.d/firefox-fedora-defaults-remove.action
 }
 
 function cpp_libraries() {
     echo "===C++ Libraries==="
-    read -p "Build and install C++ libraries [y/n]: " BUILD
+    read -p "Build and install C++ libraries [y/N]: " BUILD
     if [ "$BUILD" == "y" ]; then
         # maddy
         echo "Maddy..."
@@ -134,11 +137,11 @@ function cpp_libraries() {
 
 function install_surface_kernel() {
     echo "===MS Surface Kernel==="
-    read -p "Install Surface kernel [y/n]: " INSTALL
+    read -p "Install Surface kernel [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
         sudo dnf config-manager --add-repo=https://pkg.surfacelinux.com/fedora/linux-surface.repo
         sudo dnf install kernel-surface iptsd libwacom-surface kernel-surface-devel kernel-surface-default-watchdog -y --allowerasing
-        read -p "Install secure boot keys [y/n]: " KEYS
+        read -p "Install secure boot keys [y/N]: " KEYS
         if [ "$KEYS" == "y" ]; then
             sudo dnf install surface-secureboot -y
         fi
@@ -148,7 +151,7 @@ function install_surface_kernel() {
 
 function setup_zsh() {
     echo "===ZSH==="
-    read -p "Setup ZSH [y/n]: " INSTALL
+    read -p "Setup ZSH [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
         sudo dnf install zsh -y
         if command -v curl >/dev/null 2>&1; then
@@ -185,7 +188,7 @@ echo
 echo "Please stay attentive during the installation process,"
 echo "as you may need to enter your password multiple times."
 echo 
-read -p "Continue [y/n]: " CONTINUE
+read -p "Continue [y/N]: " CONTINUE
 if [ "$CONTINUE" == "y" ]; then
     enable_repos
     upgrade
@@ -198,7 +201,7 @@ if [ "$CONTINUE" == "y" ]; then
     setup_zsh
     display_links
     echo "===Reboot==="
-    read -p "Reboot [y/n]: " REBOOT
+    read -p "Reboot [y/N]: " REBOOT
     if [ "$REBOOT" == "y" ]; then
         sudo reboot
     else
