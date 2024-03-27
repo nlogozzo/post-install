@@ -24,7 +24,7 @@ function install_apps_from_repos() {
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
     sudo dnf install https://download.onlyoffice.com/repo/centos/main/noarch/onlyoffice-repo.noarch.rpm -y
-    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it texlive-scheme-full texstudio flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it texlive-scheme-full texstudio flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions dconf-editor -y --allowerasing
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel jsoncpp-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel blas-devel lapack-devel fftw-devel libidn-devel libxml2-devel mm-devel -y --allowerasing
     pip install yt-dlp psutil requirements-parser
@@ -46,12 +46,36 @@ function configure_user() {
     echo "===Configuring User==="
     sleep 1
     # Add user to groups
-    echo "Setting groups..."
+    echo "Configuring user groups..."
     sudo usermod -a -G tomcat $USER
     sudo usermod -a -G lp $USER
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
+    # Configure GNOME settings
+    echo "Configuring GNOME settings..."
+    read -p "Set dark theme [y/N]: " DARK
+    if [ "$DARK" == "y" ]; then
+        gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+        gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+    else
+        gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
+    fi
+    read -p "Use 12-hour time format [y/N]: " TIME
+    if [ "$TIME" == "y" ]; then
+        gsettings set org.gnome.desktop.interface clock-format '12h'
+    fi
+    gsettings set org.gnome.desktop.interface clock-show-weekday true
+    gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+    gsettings set org.gnome.desktop.interface show-battery-percentage true
+    gsettings set org.gnome.mutter center-new-windows true
+    gsettings set org.gnome.mutter workspaces-only-on-primary false
+    gsettings set org.gnome.desktop.peripherals.touchpad click-method 'areas'
+    gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
+    gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll true
+    gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+    gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
+    gsettings set org.gnome.desktop.session idle-delay 900
     # Firefox theme
     echo "Installing Firefox theme..."
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
@@ -72,7 +96,35 @@ function configure_system() {
     echo "firefox:any:sudo rm -f /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js" | sudo tee -a /etc/dnf/plugins/post-transaction-actions.d/firefox-fedora-defaults-remove.action
 }
 
-function cpp_libraries() {
+function instal_gnome_extensions() {
+    echo "===GNOME Extensions==="
+    read -p "Install GNOME extensions [y/N]: " INSTALL
+    if [ "$INSTALL" == "y" ]; then
+        array=( https://extensions.gnome.org/extension/4269/alphabetical-app-grid/
+        https://extensions.gnome.org/extension/615/appindicator-support/
+        https://extensions.gnome.org/extension/4362/fullscreen-avoider/
+        https://extensions.gnome.org/extension/5506/user-avatar-in-quick-settings/
+        https://extensions.gnome.org/extension/1108/add-username-to-top-panel/
+        https://extensions.gnome.org/extension/5500/auto-activities/
+        https://extensions.gnome.org/extension/6096/smile-complementary-extension/
+        https://extensions.gnome.org/extension/5105/reboottouefi/
+        https://extensions.gnome.org/extension/5410/grand-theft-focus/ )
+        cd ~
+        for i in "${array[@]}"; do
+            EXTENSION_ID=$(curl -s $i | grep -oP 'data-uuid="\K[^"]+')
+            VERSION_TAG=$(curl -Lfs "https://extensions.gnome.org/extension-query/?search=$EXTENSION_ID" | jq '.extensions[0] | .shell_version_map | map(.pk) | max')
+            wget -O ${EXTENSION_ID}.zip "https://extensions.gnome.org/download-extension/${EXTENSION_ID}.shell-extension.zip?version_tag=$VERSION_TAG"
+            gnome-extensions install --force ${EXTENSION_ID}.zip
+            if ! gnome-extensions list | grep --quiet ${EXTENSION_ID}; then
+                busctl --user call org.gnome.Shell.Extensions /org/gnome/Shell/Extensions org.gnome.Shell.Extensions InstallRemoteExtension s ${EXTENSION_ID}
+            fi
+            gnome-extensions enable ${EXTENSION_ID}
+            rm ${EXTENSION_ID}.zip
+        done
+    fi
+}
+
+function install_cpp_libraries() {
     echo "===C++ Libraries==="
     read -p "Build and install C++ libraries [y/N]: " BUILD
     if [ "$BUILD" == "y" ]; then
@@ -163,18 +215,6 @@ function setup_zsh() {
 }
 
 function display_links() {
-    echo "===GNOME Extensions==="
-    echo "https://extensions.gnome.org/extension/4269/alphabetical-app-grid/"
-    echo "https://extensions.gnome.org/extension/5237/rounded-window-corners/"
-    echo "https://extensions.gnome.org/extension/615/appindicator-support/"
-    echo "https://extensions.gnome.org/extension/4362/fullscreen-avoider/"
-    echo "https://extensions.gnome.org/extension/5506/user-avatar-in-quick-settings/"
-    echo "https://extensions.gnome.org/extension/1108/add-username-to-top-panel/"
-    echo "https://extensions.gnome.org/extension/5500/auto-activities/"
-    echo "https://extensions.gnome.org/extension/3193/blur-my-shell/"
-    echo "https://extensions.gnome.org/extension/6096/smile-complementary-extension/"
-    echo "https://extensions.gnome.org/extension/5105/reboottouefi/"
-    echo "https://extensions.gnome.org/extension/5410/grand-theft-focus/"
     echo "===Data Drive Instructions==="
     echo "https://community.linuxmint.com/tutorial/view/1609"
 }
@@ -196,7 +236,8 @@ if [ "$CONTINUE" == "y" ]; then
     install_apps_from_flatpak
     configure_user
     configure_system
-    cpp_libraries
+    install_gnome_extensions
+    install_cpp_libraries
     install_surface_kernel
     setup_zsh
     display_links
