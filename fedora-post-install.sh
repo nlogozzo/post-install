@@ -43,7 +43,7 @@ function install_apps_from_repos() {
         sudo wget https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-2.2.3.20090.tar.gz
         sudo tar -xvzf jetbrains-toolbox-2.2.3.20090.tar.gz
         sudo mv jetbrains-toolbox-2.2.3.20090 jetbrains-toolbox
-        rm -rf jetbrains-toolbox-2.2.3.20090.tar.gz
+        sudo rm -rf jetbrains-toolbox-2.2.3.20090.tar.gz
         ./jetbrains-toolbox/jetbrains-toolbox
     fi
 }
