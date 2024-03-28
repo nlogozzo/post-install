@@ -24,14 +24,28 @@ function install_apps_from_repos() {
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
     sudo dnf install https://download.onlyoffice.com/repo/centos/main/noarch/onlyoffice-repo.noarch.rpm -y
-    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it texlive-scheme-full texstudio flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions dconf-editor -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console gnome-builder simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions dconf-editor -y --allowerasing
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel jsoncpp-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel blas-devel lapack-devel fftw-devel libidn-devel libxml2-devel mm-devel -y --allowerasing
     pip install yt-dlp psutil requirements-parser
     cd ~
-    wget https://mega.nz/linux/repo/Fedora_39/x86_64/megasync-Fedora_39.x86_64.rpm && sudo dnf install "megasync-Fedora_39.x86_64.rpm"
+    wget https://mega.nz/linux/repo/Fedora_39/x86_64/megasync-Fedora_39.x86_64.rpm
+    sudo dnf install "megasync-Fedora_39.x86_64.rpm" -y
     rm -rf megasync-Fedora_39.x86_64.rpm
     sudo dnf remove gnome-terminal -y
+    read -p "Install latex support [y/N]: " LATEX
+    if [ "$LATEX" == "y" ]; then
+        sudo dnf install texlive-scheme-full texstudio -y
+    fi
+    read -p "Install JetBrains Toolbox [y/N]: " JETBRAINS
+    if [ "$JETBRAINS" == "y" ]; then
+        cd /opt/
+        sudo wget https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-2.2.3.20090.tar.gz
+        sudo tar -xvzf jetbrains-toolbox-2.2.3.20090.tar.gz
+        sudo mv jetbrains-toolbox-2.2.3.20090 jetbrains-toolbox
+        rm -rf jetbrains-toolbox-2.2.3.20090.tar.gz
+        ./jetbrains-toolbox/jetbrains-toolbox
+    fi
 }
 
 function install_apps_from_flatpak() {
@@ -39,7 +53,7 @@ function install_apps_from_flatpak() {
     sleep 1
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    flatpak install flathub org.gnome.Sdk//45 org.gnome.Platform//45 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca
+    flatpak install -y flathub org.gnome.Sdk//45 org.gnome.Platform//45 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca
 }
 
 function configure_user() {
@@ -76,6 +90,8 @@ function configure_user() {
     gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
     gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
     gsettings set org.gnome.desktop.session idle-delay 900
+    gsettings set org.gtk.settings.file-chooser sort-directories-first true
+    gsettings set org.gtk.Settings.file-chooser show-hidden true
     # Firefox theme
     echo "Installing Firefox theme..."
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
@@ -88,7 +104,7 @@ function configure_system() {
     echo "Enabling and starting services..."
     sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
-    # Remove firefox fedora defaults
+    # Remove Firefox Fedora defaults
     echo "Removing Firefox Fedora defaults..."
     sudo rm -f /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js
     sudo mkdir -p /etc/dnf/plugins/post-transaction-actions.d/
@@ -96,7 +112,7 @@ function configure_system() {
     echo "firefox:any:sudo rm -f /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js" | sudo tee -a /etc/dnf/plugins/post-transaction-actions.d/firefox-fedora-defaults-remove.action
 }
 
-function instal_gnome_extensions() {
+function install_gnome_extensions() {
     echo "===GNOME Extensions==="
     read -p "Install GNOME extensions [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
@@ -223,7 +239,7 @@ cd ~
 echo "===Fedora Post Install Script==="
 echo "by Nicholas Logozzo <nlogozzo>"
 echo 
-echo "This script is meant to be used on Fedora Workstation systems."
+echo "This script is meant to be used on Fedora Workstation 39 systems."
 echo 
 echo "Please stay attentive during the installation process,"
 echo "as you may need to enter your password multiple times."
