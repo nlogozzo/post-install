@@ -28,15 +28,21 @@ function install_apps_from_repos() {
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel jsoncpp-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel blas-devel lapack-devel fftw-devel libidn-devel libxml2-devel mm-devel -y --allowerasing
     pip install yt-dlp psutil requirements-parser
-    cd ~
+    sudo dnf remove gnome-terminal -y
+    # Megasync
     wget https://mega.nz/linux/repo/Fedora_39/x86_64/megasync-Fedora_39.x86_64.rpm
     sudo dnf install "megasync-Fedora_39.x86_64.rpm" -y
     rm -rf megasync-Fedora_39.x86_64.rpm
-    sudo dnf remove gnome-terminal -y
+    # Android Messages
+    wget https://github.com/OrangeDrangon/android-messages-desktop/releases/download/v5.4.2/Android.Messages-v5.4.2-linux-x86_64.rpm
+    sudo dnf install "Android.Messages-v5.4.2-linux-x86_64.rpm" -y
+    rm -rf Android.Messages-v5.4.2-linux-x86_64.rpm
+    # Latex
     read -p "Install latex support [y/N]: " LATEX
     if [ "$LATEX" == "y" ]; then
         sudo dnf install texlive-scheme-full texstudio -y
     fi
+    # JetBrains Toolbox
     read -p "Install JetBrains Toolbox [y/N]: " JETBRAINS
     if [ "$JETBRAINS" == "y" ]; then
         cd /opt/
@@ -46,6 +52,7 @@ function install_apps_from_repos() {
         sudo rm -rf jetbrains-toolbox-2.2.3.20090.tar.gz
         ./jetbrains-toolbox/jetbrains-toolbox
     fi
+    cd ~
 }
 
 function install_apps_from_flatpak() {
@@ -125,7 +132,6 @@ function install_gnome_extensions() {
         https://extensions.gnome.org/extension/6096/smile-complementary-extension/
         https://extensions.gnome.org/extension/5105/reboottouefi/
         https://extensions.gnome.org/extension/5410/grand-theft-focus/ )
-        cd ~
         for i in "${array[@]}"; do
             EXTENSION_ID=$(curl -s $i | grep -oP 'data-uuid="\K[^"]+')
             VERSION_TAG=$(curl -Lfs "https://extensions.gnome.org/extension-query/?search=$EXTENSION_ID" | jq '.extensions[0] | .shell_version_map | map(.pk) | max')
