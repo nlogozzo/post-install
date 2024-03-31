@@ -20,7 +20,7 @@ function enable_repos() {
 function upgrade() {
     echo "===Upgrading System==="
     sleep 1
-    sudo zypper -n refresh
+    sudo zypper refresh
     sudo zypper -n dup
 }
 
@@ -31,18 +31,19 @@ function install_apps_from_repos() {
     sudo zypper -n install --type pattern devel_C_C++
     sudo zypper -n install --type pattern kvm_server
     sudo zypper -n install --type pattern kvm_tools
-    sudo zypper -n install opi gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam mixxx neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio adw-gtk3 adw-gtk3-dark libunity
+    sudo zypper -n install opi gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio adw-gtk3 adw-gtk3-dark
+    sudo zypper install mixxx
     echo "CHOOSE OPTION 1"
     sudo zypper install MozillaFirefox-branding-upstream
-    sudo zypper -n remove gnome-terminal eog cheese
+    sudo zypper -n remove gnome-terminal eog cheese evolution
     pip install yt-dlp psutil requirements-parser
     # Megasync
     wget https://mega.nz/linux/repo/openSUSE_Tumbleweed/x86_64/megasync-openSUSE_Tumbleweed.x86_64.rpm 
-    sudo zypper -n in \"$PWD/megasync-openSUSE_Tumbleweed.x86_64.rpm\"
+    sudo zypper install "megasync-openSUSE_Tumbleweed.x86_64.rpm"
     rm -rf megasync-openSUSE_Tumbleweed.x86_64.rpm
     # Android Messages
     wget https://github.com/OrangeDrangon/android-messages-desktop/releases/download/v5.4.2/Android.Messages-v5.4.2-linux-x86_64.rpm
-    sudo dnf install "Android.Messages-v5.4.2-linux-x86_64.rpm" -y
+    sudo zypper install "Android.Messages-v5.4.2-linux-x86_64.rpm"
     rm -rf Android.Messages-v5.4.2-linux-x86_64.rpm
     # JetBrains Toolbox
     read -p "Install JetBrains Toolbox [y/N]: " JETBRAINS
@@ -63,7 +64,7 @@ function install_apps_from_flatpak() {
     sudo zypper -n install flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher
+    sudo flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher
 }
 
 function configure_user() {
@@ -111,10 +112,6 @@ function configure_user() {
 function configure_system() {
     echo "===Configuring System==="
     sleep 1
-    # Enable and start services
-    echo "Enabling and starting services..."
-    sudo systemctl start libvirtd
-    sudo systemctl enable libvirtd
     # Configure grub
     echo "Configuring grub..."
     sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
@@ -206,9 +203,10 @@ function install_surface_kernel() {
     read -p "Install Surface kernel [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
         sudo zypper -n addrepo https://download.opensuse.org/repositories/home:TaivasJumala:Surface/openSUSE_Tumbleweed/home:TaivasJumala:Surface.repo
-        sudo zypper -n refresh
-        sudo zypper -n install yast2-bootloader 
-        sudo zypper -n -r 'Linux Surface (openSUSE_Tumbleweed)' kernel-default iptsd
+        sudo zypper refresh
+        sudo zypper -n install yast2-bootloader
+        sudo zypper -n remove kernel-default
+        sudo zypper -n install -r 'Linux Surface (openSUSE_Tumbleweed)' kernel-default
     fi
 }
 
