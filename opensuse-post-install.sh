@@ -12,6 +12,9 @@ function enable_repos() {
     sudo chown root:root /etc/zypp/repos.d/microsoft-prod.repo
     sudo rpm --import https://rpm.packages.shiftkey.dev/gpg.key
     sudo sh -c 'echo -e "[shiftkey-packages]\nname=GitHub Desktop\nbaseurl=https://rpm.packages.shiftkey.dev/rpm/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://rpm.packages.shiftkey.dev/gpg.key" > /etc/zypp/repos.d/shiftkey-packages.repo'
+    sudo zypper -n addrepo https://download.opensuse.org/repositories/home:Dead_Mozay/openSUSE_Tumbleweed/home:Dead_Mozay.repo
+    sudo zypper -n addrepo https://download.opensuse.org/repositories/home:MaxxedSUSE/openSUSE_Tumbleweed/home:MaxxedSUSE.repo
+    sudo zypper -n addrepo https://download.opensuse.org/repositories/home:illuusio/openSUSE_Tumbleweed/home:illuusio.repo
 }
 
 function upgrade() {
@@ -28,11 +31,10 @@ function install_apps_from_repos() {
     sudo zypper -n install --type pattern devel_C_C++
     sudo zypper -n install --type pattern kvm_server
     sudo zypper -n install --type pattern kvm_tools
-    sudo zypper -n install opi gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio
+    sudo zypper -n install opi gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam mixxx neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio adw-gtk3 adw-gtk3-dark libunity
     echo "CHOOSE OPTION 1"
     sudo zypper install MozillaFirefox-branding-upstream
     sudo zypper -n remove gnome-terminal eog cheese
-    sudo opi -n -m home:Dead_Mozay/adw-gtk3 home:Dead_Mozay/adw-gtk3-theme home:Dead_Mozay/libunity home:MaxxedSUSE/onlyoffice-desktopeditors home:illuusio/mixxx
     pip install yt-dlp psutil requirements-parser
     # Megasync
     wget https://mega.nz/linux/repo/openSUSE_Tumbleweed/x86_64/megasync-openSUSE_Tumbleweed.x86_64.rpm 
@@ -203,8 +205,10 @@ function install_surface_kernel() {
     echo "===MS Surface Kernel==="
     read -p "Install Surface kernel [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        sudo zypper -n install yast2-bootloader
-        sudo opi -m home:TaivasJumala:Surface/kernel-default home:TaivasJumala:Surface/iptsd
+        sudo zypper -n addrepo https://download.opensuse.org/repositories/home:TaivasJumala:Surface/openSUSE_Tumbleweed/home:TaivasJumala:Surface.repo
+        sudo zypper -n refresh
+        sudo zypper -n install yast2-bootloader 
+        sudo zypper -n -r 'Linux Surface (openSUSE_Tumbleweed)' kernel-default iptsd
     fi
 }
 
