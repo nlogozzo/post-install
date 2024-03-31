@@ -103,6 +103,10 @@ function configure_user() {
     gsettings set org.gnome.desktop.session idle-delay 900
     gsettings set org.gtk.settings.file-chooser sort-directories-first true
     gsettings set org.gtk.Settings.file-chooser show-hidden true
+    read -p "Disable extension version validation [y/N]: " VALIDATION
+    if [ "$VALIDATION" == "y" ]; then
+        gsettings set org.gnome.shell disable-extension-version-validation true
+    fi
     # Firefox theme
     firefox
     echo "Installing Firefox theme..."
