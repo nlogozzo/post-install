@@ -28,8 +28,10 @@ function install_apps_from_repos() {
     sudo zypper -n install --type pattern devel_C_C++
     sudo zypper -n install --type pattern kvm_server
     sudo zypper -n install --type pattern kvm_tools
-    sudo zypper -n install opi gnome-tweaks gnome-extensions gnome-console loupe snapshot gnome-builder epiphany simple-scan gparted libreoffice xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 MozillaFirefox-branding-upstream podofo libpodofo2
-    sudo zypper -n remove gnome-terminal eog cheese MozillaFirefox-branding-openSUSE
+    sudo zypper -n install opi gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2
+    echo "CHOOSE OPTION 1"
+    sudo zypper install MozillaFirefox-branding-upstream
+    sudo zypper -n remove gnome-terminal eog cheese
     sudo opi -n -m home:Dead_Mozay/adw-gtk3 home:Dead_Mozay/adw-gtk3-theme home:Dead_Mozay/libunity home:MaxxedSUSE/onlyoffice-desktopeditors home:illuusio/mixxx
     pip install yt-dlp psutil requirements-parser
     # Megasync
