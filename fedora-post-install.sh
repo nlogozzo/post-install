@@ -24,7 +24,7 @@ function install_apps_from_repos() {
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
     sudo dnf install https://download.onlyoffice.com/repo/centos/main/noarch/onlyoffice-repo.noarch.rpm -y
-    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console gnome-builder simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions dconf-editor -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console gnome-builder simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions dconf-editor texstudio -y --allowerasing
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel jsoncpp-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel blas-devel lapack-devel fftw-devel libidn-devel libxml2-devel mm-devel -y --allowerasing
     pip install yt-dlp psutil requirements-parser
@@ -37,11 +37,6 @@ function install_apps_from_repos() {
     wget https://github.com/OrangeDrangon/android-messages-desktop/releases/download/v5.4.2/Android.Messages-v5.4.2-linux-x86_64.rpm
     sudo dnf install "Android.Messages-v5.4.2-linux-x86_64.rpm" -y
     rm -rf Android.Messages-v5.4.2-linux-x86_64.rpm
-    # Latex
-    read -p "Install latex support [y/N]: " LATEX
-    if [ "$LATEX" == "y" ]; then
-        sudo dnf install texlive-scheme-full texstudio -y
-    fi
     # JetBrains Toolbox
     read -p "Install JetBrains Toolbox [y/N]: " JETBRAINS
     if [ "$JETBRAINS" == "y" ]; then
