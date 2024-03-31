@@ -116,6 +116,10 @@ function configure_system() {
     echo "Enabling and starting services..."
     sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
+    # Configure grub
+    echo "Configuring grub..."
+    sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 }
 
 function install_gnome_extensions() {
@@ -202,6 +206,7 @@ function install_surface_kernel() {
     echo "===MS Surface Kernel==="
     read -p "Install Surface kernel [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
+        sudo zypper -n install yast2-bootloader
         sudo opi -m home:TaivasJumala:Surface/kernel-default home:TaivasJumala:Surface/iptsd
     fi
 }
