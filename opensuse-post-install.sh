@@ -202,11 +202,19 @@ function install_surface_kernel() {
     echo "===MS Surface Kernel==="
     read -p "Install Surface kernel [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
+        cd ~
         sudo zypper -n addrepo https://download.opensuse.org/repositories/home:TaivasJumala:Surface/openSUSE_Tumbleweed/home:TaivasJumala:Surface.repo
         sudo zypper refresh
-        sudo zypper -n install yast2-bootloader
+        sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel
         sudo zypper -n remove kernel-default
         sudo zypper -n install -r 'Linux Surface (openSUSE_Tumbleweed)' kernel-default
+        git clone https://github.com/linux-surface/iptsd
+        cd iptsd
+        meson setup build
+        ninja -C build
+        sudo ninja -C build install
+        cd ~
+        rm -rf iptsd
     fi
 }
 
