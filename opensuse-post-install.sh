@@ -27,14 +27,8 @@ function upgrade() {
 function install_apps_from_repos() {
     echo "===Installing Apps From Repositories==="
     sleep 1
-    sudo zypper -n install --type pattern devel_basis
-    sudo zypper -n install --type pattern devel_C_C++
-    sudo zypper -n install --type pattern kvm_server
-    sudo zypper -n install --type pattern kvm_tools
-    sudo zypper -n install opi gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio adw-gtk3 adw-gtk3-dark
-    sudo zypper install mixxx
-    echo "CHOOSE OPTION 1"
-    sudo zypper install MozillaFirefox-branding-upstream
+    sudo zypper -n install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
+    sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream firefox gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam mixxx neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio adw-gtk3 adw-gtk3-dark
     sudo zypper -n remove gnome-terminal eog cheese evolution
     pip install yt-dlp psutil requirements-parser
     # Megasync
@@ -116,6 +110,10 @@ function configure_user() {
 function configure_system() {
     echo "===Configuring System==="
     sleep 1
+    # Enable and start services
+    echo "Enabling and starting services..."
+    sudo systemctl start libvirtd
+    sudo systemctl enable libvirtd
     # Configure grub
     echo "Configuring grub..."
     sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
@@ -211,7 +209,7 @@ function install_surface_kernel() {
         sudo zypper refresh
         sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel
         sudo zypper -n remove kernel-default
-        sudo zypper -n install -r 'Linux Surface (openSUSE_Tumbleweed)' kernel-default
+        sudo zypper install -r 'Linux Surface (openSUSE_Tumbleweed)' kernel-default
         git clone https://github.com/linux-surface/iptsd
         cd iptsd
         meson setup build
