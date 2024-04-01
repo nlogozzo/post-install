@@ -95,6 +95,7 @@ function configure_user() {
     gsettings set org.gtk.settings.file-chooser sort-directories-first true
     gsettings set org.gtk.Settings.file-chooser show-hidden true
     # Firefox theme
+    firefox
     echo "Installing Firefox theme..."
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
 }
