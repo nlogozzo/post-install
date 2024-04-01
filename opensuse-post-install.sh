@@ -97,10 +97,6 @@ function configure_user() {
     gsettings set org.gnome.desktop.session idle-delay 900
     gsettings set org.gtk.settings.file-chooser sort-directories-first true
     gsettings set org.gtk.Settings.file-chooser show-hidden true
-    read -p "Disable extension version validation [y/N]: " VALIDATION
-    if [ "$VALIDATION" == "y" ]; then
-        gsettings set org.gnome.shell disable-extension-version-validation true
-    fi
     # Firefox theme
     firefox
     echo "Installing Firefox theme..."
@@ -144,6 +140,10 @@ function install_gnome_extensions() {
             gnome-extensions enable ${EXTENSION_ID}
             rm ${EXTENSION_ID}.zip
         done
+        read -p "Disable extension version validation [y/N]: " VALIDATION
+        if [ "$VALIDATION" == "y" ]; then
+            gsettings set org.gnome.shell disable-extension-version-validation true
+        fi
     fi
 }
 
@@ -245,7 +245,8 @@ echo
 echo "This script is meant to be used on OpenSuse Tumbleweed systems."
 echo 
 echo "Please stay attentive during the installation process,"
-echo "as you may need to enter your password multiple times."
+echo "as you may need to enter your password and answer"
+echo "prompts multiple times."
 echo 
 read -p "Continue [y/N]: " CONTINUE
 if [ "$CONTINUE" == "y" ]; then
