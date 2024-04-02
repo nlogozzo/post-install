@@ -23,8 +23,7 @@ function install_apps_from_repos() {
     sleep 1
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
-    sudo dnf install https://download.onlyoffice.com/repo/centos/main/noarch/onlyoffice-repo.noarch.rpm -y
-    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console gnome-builder simple-scan gparted adw-gtk3-theme libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions dconf-editor texstudio -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console gnome-builder simple-scan gparted adw-gtk3-theme libreoffice xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader mixxx steam neofetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip inkscape krita openssl joystick-support ffmpeg aria2 yt-dlp geary libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby hplip tomcat hunspell-it langpacks-it flatpak-builder dnf-plugins-core python3-dnf-plugin-post-transaction-actions dconf-editor texstudio -y --allowerasing
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel jsoncpp-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel blas-devel lapack-devel fftw-devel libidn-devel libxml2-devel mm-devel -y --allowerasing
     pip install yt-dlp psutil requirements-parser
@@ -55,7 +54,7 @@ function install_apps_from_flatpak() {
     sleep 1
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher
+    flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher org.onlyoffice.desktopeditors
 }
 
 function configure_user() {
@@ -68,6 +67,9 @@ function configure_user() {
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
+    # Configure bash
+    echo "Configuring bash..."
+    echo "neofetch" >> ~/.bashrc
     # Configure GNOME settings
     echo "Configuring GNOME settings..."
     read -p "Set dark theme [y/N]: " DARK
@@ -105,8 +107,8 @@ function configure_system() {
     sleep 1
     # Enable and start services
     echo "Enabling and starting services..."
-    sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
+    sudo systemctl start libvirtd
     # Remove Firefox Fedora defaults
     echo "Removing Firefox Fedora defaults..."
     sudo rm -f /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js
@@ -139,6 +141,10 @@ function install_gnome_extensions() {
             gnome-extensions enable ${EXTENSION_ID}
             rm ${EXTENSION_ID}.zip
         done
+        read -p "Disable extension version validation [y/N]: " VALIDATION
+        if [ "$VALIDATION" == "y" ]; then
+            gsettings set org.gnome.shell disable-extension-version-validation true
+        fi
     fi
 }
 
@@ -229,6 +235,7 @@ function setup_zsh() {
         else
             sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
         fi
+        sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a neofetch' ~/.zshrc
     fi
 }
 

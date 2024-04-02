@@ -27,8 +27,8 @@ function upgrade() {
 function install_apps_from_repos() {
     echo "===Installing Apps From Repositories==="
     sleep 1
-    sudo zypper -n install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
-    sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream firefox gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam mixxx neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio adw-gtk3 adw-gtk3-dark
+    sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
+    sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream firefox gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc14 gcc14-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel gtest webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts jsoncpp-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libxml2 podofo libpodofo2 texlive-latex texstudio adw-gtk3 adw-gtk3-dark
     sudo zypper -n remove gnome-terminal eog cheese evolution
     pip install yt-dlp psutil requirements-parser
     # Megasync
@@ -58,7 +58,7 @@ function install_apps_from_flatpak() {
     sudo zypper -n install flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    sudo flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher
+    sudo flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher org.onlyoffice.desktopeditors org.mixxx.Mixxx
 }
 
 function configure_user() {
@@ -71,6 +71,9 @@ function configure_user() {
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
+    # Configure bash
+    echo "Configuring bash..."
+    echo "neofetch" >> ~/.bashrc
     # Configure GNOME settings
     echo "Configuring GNOME settings..."
     read -p "Set dark theme [y/N]: " DARK
@@ -108,8 +111,8 @@ function configure_system() {
     sleep 1
     # Enable and start services
     echo "Enabling and starting services..."
-    sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
+    sudo systemctl start libvirtd
     # Configure grub
     echo "Configuring grub..."
     sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
@@ -230,6 +233,8 @@ function setup_zsh() {
         else
             sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
         fi
+        # Neofetch
+        sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a neofetch' ~/.zshrc
     fi
 }
 
