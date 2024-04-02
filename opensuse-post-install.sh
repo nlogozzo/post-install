@@ -13,8 +13,6 @@ function enable_repos() {
     sudo rpm --import https://rpm.packages.shiftkey.dev/gpg.key
     sudo sh -c 'echo -e "[shiftkey-packages]\nname=GitHub Desktop\nbaseurl=https://rpm.packages.shiftkey.dev/rpm/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://rpm.packages.shiftkey.dev/gpg.key" > /etc/zypp/repos.d/shiftkey-packages.repo'
     sudo zypper -n addrepo https://download.opensuse.org/repositories/home:Dead_Mozay/openSUSE_Tumbleweed/home:Dead_Mozay.repo
-    sudo zypper -n addrepo https://download.opensuse.org/repositories/home:MaxxedSUSE/openSUSE_Tumbleweed/home:MaxxedSUSE.repo
-    sudo zypper -n addrepo https://download.opensuse.org/repositories/home:illuusio/openSUSE_Tumbleweed/home:illuusio.repo
 }
 
 function upgrade() {
@@ -28,7 +26,7 @@ function install_apps_from_repos() {
     echo "===Installing Apps From Repositories==="
     sleep 1
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
-    sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream firefox gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice onlyoffice-desktopeditors xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel texlive-latex texstudio adw-gtk3 adw-gtk3-dark
+    sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream firefox gnome-tweaks gnome-extensions gnome-console loupe snapshot epiphany simple-scan gparted libreoffice xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark
     sudo zypper -n remove gnome-terminal eog cheese evolution
     sudo zypper -n remove -u patterns-gnome-gnome_games
     pip install yt-dlp psutil requirements-parser
@@ -99,8 +97,6 @@ function configure_user() {
     gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
     gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
     gsettings set org.gnome.desktop.session idle-delay 900
-    gsettings set org.gtk.settings.file-chooser sort-directories-first true
-    gsettings set org.gtk.Settings.file-chooser show-hidden true
     # Firefox theme
     firefox
     echo "Installing Firefox theme..."
