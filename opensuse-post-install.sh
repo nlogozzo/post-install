@@ -240,6 +240,8 @@ function install_surface_kernel() {
         meson setup build
         ninja -C build
         sudo ninja -C build install
+        sudo sed -i 's/# DisableOnPalm = false/DisableOnPalm = true/g' /etc/iptsd.conf
+        sudo sed -i 's/# DisableOnStylus = false/DisableOnStylus = true/g' /etc/iptsd.conf
         cd ~
         rm -rf iptsd
     fi
