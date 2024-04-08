@@ -222,6 +222,7 @@ function install_cpp_libraries() {
         cmake --build .
         sudo cmake --install .
         rm -rf ~/libnick
+        cd ~
     fi
 }
 
@@ -230,11 +231,17 @@ function install_surface_kernel() {
     read -p "Install Surface kernel [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
         cd ~
+        # Prepare
+        echo "Preparing..."
         sudo zypper -n addrepo https://download.opensuse.org/repositories/home:TaivasJumala:Surface/openSUSE_Tumbleweed/home:TaivasJumala:Surface.repo
         sudo zypper refresh
-        sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel
+        sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel python311-pytest
+        # Install kernel
+        echo "Installing kernel..."
         sudo zypper -n remove kernel-default
         sudo zypper install -r 'Linux Surface (openSUSE_Tumbleweed)' kernel-default
+        # Install iptsd
+        echo "Installing iptsd..."
         git clone --depth 1 --branch "v2" https://github.com/linux-surface/iptsd
         cd iptsd
         meson setup build
@@ -242,8 +249,36 @@ function install_surface_kernel() {
         sudo ninja -C build install
         sudo sed -i 's/# DisableOnPalm = false/DisableOnPalm = true/g' /etc/iptsd.conf
         sudo sed -i 's/# DisableOnStylus = false/DisableOnStylus = true/g' /etc/iptsd.conf
+        rm -rf ~/iptsd
         cd ~
-        rm -rf iptsd
+        # Install libwacom
+        echo "Installing libwacom..."
+        git clone --depth 1 --branch "libwacom-2.10.0" https://github.com/linuxwacom/libwacom
+        cd libwacom
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0001-Add-support-for-BUS_VIRTUAL.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0002-Add-support-for-Intel-Management-Engine-bus.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0003-data-Add-Microsoft-Surface-Pro-3.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0004-data-Add-Microsoft-Surface-Pro-4.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0005-data-Add-Microsoft-Surface-Pro-5.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0006-data-Add-Microsoft-Surface-Pro-6.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0007-data-Add-Microsoft-Surface-Pro-7.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0008-data-Add-Microsoft-Surface-Pro-7.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0009-data-Add-Microsoft-Surface-Pro-8.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0010-data-Add-Microsoft-Surface-Pro-9.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0011-data-Add-Microsoft-Surface-Book.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0012-data-Add-Microsoft-Surface-Book-2-13.5.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0013-data-Add-Microsoft-Surface-Book-2-15.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0014-data-Add-Microsoft-Surface-Book-3-13.5.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0015-data-Add-Microsoft-Surface-Book-3-15.patch
+        wget https://raw.githubusercontent.com/linux-surface/libwacom-surface/master/patches/v2/0016-data-Add-Microsoft-Surface-Laptop-Studio.patch
+        for i in $(ls *.patch); do
+            patch -Np1 -i "$i" || true
+        done
+        meson setup build
+        meson compile -C build
+        sudo meson install -C build
+        rm -rf ~/libwacom
+        cd ~
     fi
 }
 
