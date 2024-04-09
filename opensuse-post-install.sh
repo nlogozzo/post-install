@@ -297,7 +297,7 @@ function setup_lazyvim() {
     echo "===LazyVim==="
     read -p "Setup LazyVim [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        sudo -n zypper install neovim
+        sudo -n zypper install neovim fd lazygit ripgrep
         # Backup
         mv ~/.config/nvim{,.bak}
         mv ~/.local/share/nvim{,.bak}
@@ -306,6 +306,15 @@ function setup_lazyvim() {
         # LazyVim
         git clone https://github.com/LazyVim/starter ~/.config/nvim
         rm -rf ~/.config/nvim/.git
+        echo "return {
+  { "Mofiqul/vscode.nvim" },
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "vscode",
+    },
+  },
+}" >> ~/.config/nvim/lua/plugins/colorscheme.lua
     fi
 }
 
