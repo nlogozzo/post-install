@@ -4,7 +4,7 @@
 function enable_repos() {
     echo "===Enabling Repositories==="
     sleep 1
-    sudo zypper -n install libicu
+    sudo zypper -n install libicu wget
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/zypp/repos.d/vscode.repo'
     wget https://packages.microsoft.com/config/opensuse/15/prod.repo
@@ -26,8 +26,8 @@ function install_apps_from_repos() {
     echo "===Installing Apps From Repositories==="
     sleep 1
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
-    sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream libreoffice-branding-upstream firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code github-desktop gcc gcc-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel wget git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark
-    sudo zypper -n remove gnome-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
+    sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream libreoffice-branding-upstream firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel unzip git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark
+    sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
     # Megasync
     wget https://mega.nz/linux/repo/openSUSE_Tumbleweed/x86_64/megasync-openSUSE_Tumbleweed.x86_64.rpm 
@@ -70,6 +70,7 @@ function configure_user() {
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
+    git lfs install
     # Configure bash
     echo "Configuring bash..."
     echo "neofetch" >> ~/.bashrc
@@ -101,6 +102,15 @@ function configure_user() {
     firefox
     echo "Installing Firefox theme..."
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
+    # Install Terminal Font
+    echo "Installing JetBrains Mono Nerd Font..."
+    mkdir -p ~/.local/share/fonts
+    cd ~/.local/share/fonts
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
+    unzip JetBrainsMono.zip
+    rm -rf JetBrainsMono.zip
+    fc-cache -f -v
+    gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10'
 }
 
 function configure_system() {
@@ -115,6 +125,7 @@ function configure_system() {
     echo "Enabling and starting services..."
     sudo systemctl enable libvirtd
     sudo systemctl start libvirtd
+    sudo virsh net-autostart default
     # Configure grub
     echo "Configuring grub..."
     sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
@@ -282,6 +293,22 @@ function install_surface_kernel() {
     fi
 }
 
+function setup_lazyvim() {
+    echo "===LazyVim==="
+    read -p "Setup LazyVim [y/N]: " INSTALL
+    if [ "$INSTALL" == "y" ]; then
+        sudo -n zypper install neovim
+        # Backup
+        mv ~/.config/nvim{,.bak}
+        mv ~/.local/share/nvim{,.bak}
+        mv ~/.local/state/nvim{,.bak}
+        mv ~/.cache/nvim{,.bak}
+        # LazyVim
+        git clone https://github.com/LazyVim/starter ~/.config/nvim
+        rm -rf ~/.config/nvim/.git
+    fi
+}
+
 function setup_zsh() {
     echo "===ZSH==="
     read -p "Setup ZSH [y/N]: " INSTALL
@@ -323,6 +350,7 @@ if [ "$CONTINUE" == "y" ]; then
     install_gnome_extensions
     install_cpp_libraries
     install_surface_kernel
+    setup_lazyvim
     setup_zsh
     display_links
     echo "===Reboot==="
