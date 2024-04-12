@@ -25,7 +25,8 @@ function install_apps_from_repos() {
 	echo "===Installing Apps From Repositories==="
 	sleep 1
 	sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
-	sudo zypper install qemu libvirt opi MozillaFirefox-branding-upstream libreoffice-branding-upstream firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel unzip git nano cabextract fontconfig python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark
+	sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream plymouth-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
+	sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 qt5ct qt6ct firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libboost*devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark
 	sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
 	sudo zypper -n remove -u patterns-gnome-gnome_games
 	# Megasync
@@ -74,6 +75,7 @@ function configure_user() {
 	# Configure bash
 	echo "Configuring bash..."
 	echo "neofetch" >>~/.bashrc
+	echo "export QT_QPA_PLATFORMTHEME=qt5ct" >>~/.bashrc
 	# Configure GNOME settings
 	echo "Configuring GNOME settings..."
 	read -p "Set dark theme [y/N]: " DARK
@@ -111,6 +113,9 @@ function configure_user() {
 	rm -rf JetBrainsMono.zip
 	fc-cache -f -v
 	gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10'
+	# Configure QT
+	echo "Configuring QT..."
+	echo "export QT_QPA_PLATFORMTHEME=qt5ct" >>~/.profile
 }
 
 function configure_system() {
@@ -298,6 +303,7 @@ function setup_lazyvim() {
 	read -p "Setup LazyVim [y/N]: " INSTALL
 	if [ "$INSTALL" == "y" ]; then
 		sudo zypper -n install neovim fd lazygit ripgrep
+		sudo npm install --global neovim
 		# Backup
 		mv ~/.config/nvim{,.bak}
 		mv ~/.local/share/nvim{,.bak}
@@ -314,7 +320,7 @@ function setup_lazyvim() {
       colorscheme = "vscode",
     },
   },
-}' >> ~/.config/nvim/lua/plugins/colorscheme.lua
+}' >>~/.config/nvim/lua/plugins/colorscheme.lua
 	fi
 }
 
@@ -330,6 +336,7 @@ function setup_zsh() {
 		fi
 		# Neofetch
 		sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a neofetch' ~/.zshrc
+		sed -i '/export GPG_TTY=$TTY/a export QT_QPA_PLATFORMTHEME=qt5ct' ~/.zshrc
 	fi
 }
 
