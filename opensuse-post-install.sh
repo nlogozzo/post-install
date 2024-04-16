@@ -136,6 +136,14 @@ function configure_system() {
 	echo "Configuring grub..."
 	sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
 	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+	# Enable SSH
+	read -p "Enable SSH [y/N]: " SSH
+	if [ "$SSH" == "y" ]; then
+		sudo systemctl enable sshd
+		sudo systemctl start sshd
+		sudo firewall-cmd --zone=public --add-service=ssh --permanent
+		sudo firewall-cmd --reload
+	fi
 }
 
 function install_gnome_extensions() {
