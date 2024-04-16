@@ -29,6 +29,7 @@ function install_apps_from_repos() {
 	sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 qt5ct qt6ct firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby hplip tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark
 	sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
 	sudo zypper -n remove -u patterns-gnome-gnome_games
+    opi codecs
 	# Megasync
 	wget https://mega.nz/linux/repo/openSUSE_Tumbleweed/x86_64/megasync-openSUSE_Tumbleweed.x86_64.rpm
 	sudo zypper install "megasync-openSUSE_Tumbleweed.x86_64.rpm"
@@ -251,7 +252,7 @@ function install_surface_kernel() {
 		echo "Preparing..."
 		sudo zypper -n addrepo https://download.opensuse.org/repositories/home:TaivasJumala:Surface/openSUSE_Tumbleweed/home:TaivasJumala:Surface.repo
 		sudo zypper refresh
-		sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel python311-pytest
+		sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel python311-pytest libgudev-1_0-0
 		# Install kernel
 		echo "Installing kernel..."
 		sudo zypper -n remove kernel-default
