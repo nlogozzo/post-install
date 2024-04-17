@@ -71,7 +71,7 @@ function configure_user() {
 	# Configure git
 	echo "Configuring git..."
 	git config --global protocol.file.allow always
-	git config --global http.postBuffer 157286400
+	git config --global http.postBuffer 524288000
 	git lfs install
 	# Configure bash
 	echo "Configuring bash..."
