@@ -136,12 +136,15 @@ function configure_system() {
 	echo "Configuring grub..."
 	sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
 	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-	# Enable SSH
-	read -p "Enable SSH [y/N]: " SSH
-	if [ "$SSH" == "y" ]; then
+	# Enable Remote Desktop Connection
+	read -p "Enable Remote Desktop Connection (rdp and ssh) [y/N]: " REMOTE
+	if [ "$REMOTE" == "y" ]; then
 		sudo systemctl enable sshd
 		sudo systemctl start sshd
+		grdctl rdp enable
+		grdctl rdp disable-view-only
 		sudo firewall-cmd --zone=public --add-service=ssh --permanent
+		sudo firewall-cmd --zone=public --add-service=rdp --permanent
 		sudo firewall-cmd --reload
 	fi
 }
@@ -260,7 +263,7 @@ function install_surface_kernel() {
 		echo "Preparing..."
 		sudo zypper -n addrepo https://download.opensuse.org/repositories/home:TaivasJumala:Surface/openSUSE_Tumbleweed/home:TaivasJumala:Surface.repo
 		sudo zypper refresh
-		sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel python311-pytest libgudev-1_0-0
+		sudo zypper install yast2-bootloader gsl spdlog-devel libinih-devel eigen3-devel SDL2-devel libgle-devel python311-pytest libgudev-1_0-0 libgudev-1_0-devel libevdev-devel libevdev2 python311-libevdev
 		# Install kernel
 		echo "Installing kernel..."
 		sudo zypper -n remove kernel-default
