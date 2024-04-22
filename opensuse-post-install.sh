@@ -26,7 +26,7 @@ function install_apps_from_repos() {
 	sleep 1
 	sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
 	sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
-	sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 qt5ct qt6ct firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch tmux curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark xpadneo-kmp-default gnome-backgrounds
+	sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 qt5ct qt6ct firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch tmux curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark xpadneo-kmp-default gnome-backgrounds gnome-network-displays
 	sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
 	sudo zypper -n remove -u patterns-gnome-gnome_games
 	opi codecs
@@ -58,7 +58,7 @@ function install_apps_from_flatpak() {
 	flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 	flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 	sudo flatpak update
-	sudo flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile com.github.neithern.g4music hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher org.onlyoffice.desktopeditors org.mixxx.Mixxx org.gnome.NetworkDisplays
+	sudo flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile com.github.neithern.g4music hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher org.onlyoffice.desktopeditors org.mixxx.Mixxx
 }
 
 function configure_user() {
@@ -136,6 +136,10 @@ function configure_system() {
 	echo "Configuring grub..."
 	sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
 	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+	# Configure firewall
+	echo "Configuring firewall..."
+	sudo firewall-cmd --zone=public --add-port=7236/tcp --permanent
+	sudo firewall-cmd --zone=public --add-port=7236/udp --permanent
 	# Enable Remote Desktop Connection
 	read -p "Enable Remote Desktop Connection (rdp and ssh) [y/N]: " REMOTE
 	if [ "$REMOTE" == "y" ]; then
@@ -145,8 +149,8 @@ function configure_system() {
 		grdctl rdp disable-view-only
 		sudo firewall-cmd --zone=public --add-service=ssh --permanent
 		sudo firewall-cmd --zone=public --add-service=rdp --permanent
-		sudo firewall-cmd --reload
 	fi
+	sudo firewall-cmd --reload
 }
 
 function install_gnome_extensions() {
