@@ -357,6 +357,22 @@ function setup_zsh() {
     fi
 }
 
+function setup_distrobox() {
+    echo "===Distrobox==="
+    read -p "Setup Distrobox [y/N]: " INSTALL
+    if [ "$INSTALL" == "y" ]; then
+        sudo zypper -n install distrobox
+        sudo groupadd docker
+        sudo usermod -aG docker $USER
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        read -p "Setup ubuntu image [y/N]: " UBUNTU
+        if [ "$UBUNTU" == "y" ]; then
+            distrobox create --root ubuntu --name ubuntu --image ubuntu:latest
+        fi
+    fi
+}
+
 function display_links() {
     echo "===Data Drive Instructions==="
     echo "https://community.linuxmint.com/tutorial/view/1609"
@@ -385,6 +401,7 @@ if [ "$CONTINUE" == "y" ]; then
     install_printers
     setup_lazyvim
     setup_zsh
+    setup_distrobox
     display_links
     echo "===Reboot==="
     read -p "Reboot [y/N]: " REBOOT
