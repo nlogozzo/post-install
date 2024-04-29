@@ -342,6 +342,20 @@ function setup_lazyvim() {
     fi
 }
 
+function setup_distrobox() {
+    echo "===Distrobox==="
+    read -p "Setup Distrobox [y/N]: " INSTALL
+    if [ "$INSTALL" == "y" ]; then
+        sudo zypper -n install distrobox
+        sudo groupadd docker
+        sudo usermod -aG docker $USER
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        echo "Please restart before creating a container."
+        echo "UBUNTU: distrobox create --root --name ubuntu --image ubuntu:latest"
+    fi
+}
+
 function setup_zsh() {
     echo "===ZSH==="
     read -p "Setup ZSH [y/N]: " INSTALL
@@ -354,20 +368,6 @@ function setup_zsh() {
         fi
         # Configure
         sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a neofetch' ~/.zshrc
-    fi
-}
-
-function setup_distrobox() {
-    echo "===Distrobox==="
-    read -p "Setup Distrobox [y/N]: " INSTALL
-    if [ "$INSTALL" == "y" ]; then
-        sudo zypper -n install distrobox
-        sudo groupadd docker
-        sudo usermod -aG docker $USER
-        sudo systemctl enable docker
-        sudo systemctl start docker
-        echo "Please restart before creating a container."
-        echo "UBUNTU: distrobox create --root --name ubuntu --image ubuntu:latest"
     fi
 }
 
@@ -398,8 +398,8 @@ if [ "$CONTINUE" == "y" ]; then
     install_surface_kernel
     install_printers
     setup_lazyvim
-    setup_zsh
     setup_distrobox
+    setup_zsh
     display_links
     echo "===Reboot==="
     read -p "Reboot [y/N]: " REBOOT
