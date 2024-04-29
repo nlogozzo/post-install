@@ -366,10 +366,8 @@ function setup_distrobox() {
         sudo usermod -aG docker $USER
         sudo systemctl enable docker
         sudo systemctl start docker
-        read -p "Setup ubuntu image [y/N]: " UBUNTU
-        if [ "$UBUNTU" == "y" ]; then
-            distrobox create --root ubuntu --name ubuntu --image ubuntu:latest
-        fi
+        echo "Please restart before creating a container."
+        echo "UBUNTU: distrobox create --root --name ubuntu --image ubuntu:latest"
     fi
 }
 
