@@ -26,7 +26,7 @@ function install_apps() {
     sleep 1
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
-    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark xpadneo-kmp-default gnome-backgrounds gnome-network-displays docker
+    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam fastfetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark xpadneo-kmp-default gnome-backgrounds gnome-network-displays docker distrobox
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
     opi codecs
@@ -51,6 +51,8 @@ function install_apps() {
     sudo rm -rf jetbrains-toolbox-2.2.3.20090.tar.gz
     ./jetbrains-toolbox/jetbrains-toolbox
     cd ~
+    # Cleanup
+    sudo zypper clean
 }
 
 function configure_user() {
@@ -69,7 +71,7 @@ function configure_user() {
     git lfs install
     # Configure bash
     echo "Configuring bash..."
-    echo "neofetch" >> ~/.bashrc
+    echo "fastfetch" >> ~/.bashrc
     # Configure GNOME
     echo "Configuring GNOME..."
     read -p "Set dark theme [y/N]: " DARK
@@ -346,16 +348,6 @@ function setup_lazyvim() {
     fi
 }
 
-function setup_distrobox() {
-    echo "===Distrobox==="
-    read -p "Setup Distrobox [y/N]: " INSTALL
-    if [ "$INSTALL" == "y" ]; then
-        sudo zypper install distrobox
-        echo "Please reboot the system before creating a new box."
-        echo "UBUNTU: distrobox create --root --name ubuntu --image ubuntu:latest"
-    fi
-}
-
 function setup_zsh() {
     echo "===ZSH==="
     read -p "Setup ZSH [y/N]: " INSTALL
@@ -367,13 +359,15 @@ function setup_zsh() {
             sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
         fi
         # Configure
-        sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a neofetch' ~/.zshrc
+        sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a fastfetch' ~/.zshrc
     fi
 }
 
 function display_links() {
     echo "===Data Drive Instructions==="
     echo "https://community.linuxmint.com/tutorial/view/1609"
+    echo "===Distrobox Instructions==="
+    echo "UBUNTU: distrobox create --root --name ubuntu --image ubuntu:latest"
 }
 
 cd ~
@@ -406,7 +400,8 @@ if [ "$CONTINUE" == "y" ]; then
     if [ "$REBOOT" == "y" ]; then
         sudo reboot
     else
-        echo "Please reboot to apply all changes."
+        echo "A reboot is required before using the"
+        echo "newly installed applications and services."
     fi
     echo "===DONE==="
 fi
