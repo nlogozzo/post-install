@@ -26,7 +26,7 @@ function install_apps() {
     sleep 1
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
-    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark xpadneo-kmp-default gnome-backgrounds gnome-network-displays
+    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam neofetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark xpadneo-kmp-default gnome-backgrounds gnome-network-displays docker
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
     opi codecs
@@ -60,6 +60,8 @@ function configure_user() {
     echo "Configuring user groups..."
     sudo usermod -a -G tomcat $USER
     sudo usermod -a -G lp $USER
+    sudo usermod -a -G docker $USER
+    sudo usermod -a -G wheel $USER
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
@@ -120,6 +122,8 @@ function configure_system() {
     echo "Enabling and starting services..."
     sudo systemctl enable libvirtd
     sudo systemctl start libvirtd
+    sudo systemctl enable docker
+    sudo systemctl start docker
     sudo virsh net-autostart default
     # Configure grub
     echo "Configuring grub..."
@@ -346,12 +350,8 @@ function setup_distrobox() {
     echo "===Distrobox==="
     read -p "Setup Distrobox [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        sudo zypper -n install distrobox
-        sudo groupadd docker
-        sudo usermod -aG docker $USER
-        sudo systemctl enable docker
-        sudo systemctl start docker
-        echo "Please restart before creating a container."
+        sudo zypper install distrobox
+        echo "Please reboot the system before creating a new box."
         echo "UBUNTU: distrobox create --root --name ubuntu --image ubuntu:latest"
     fi
 }
