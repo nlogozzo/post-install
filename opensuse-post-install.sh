@@ -26,7 +26,7 @@ function install_apps() {
     sleep 1
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
-    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam fastfetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server gimp inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark xpadneo-kmp-default gnome-backgrounds gnome-network-displays docker distrobox
+    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam fastfetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server gimp inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-network-displays docker distrobox
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
     opi codecs
@@ -34,7 +34,7 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     sudo flatpak update
-    sudo flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.mattjakeman.ExtensionManager com.github.tchx84.Flatseal org.gnome.Fractal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile com.github.neithern.g4music hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher org.onlyoffice.desktopeditors org.mixxx.Mixxx
+    sudo flatpak install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary us.zoom.Zoom io.github.Foldex.AdwSteamGtk com.github.tchx84.Flatseal com.mojang.Minecraft dev.geopjr.Tuba io.gitlab.adhami3310.Impression it.mijorus.smile com.github.neithern.g4music hu.kramo.Cartridges org.gnome.seahorse.Application io.missioncenter.MissionCenter io.github.alainm23.planify com.ktechpit.whatsie com.github.PintaProject.Pinta com.discordapp.Discord re.sonny.Workbench app.drey.Biblioteca io.mrarm.mcpelauncher org.onlyoffice.desktopeditors org.mixxx.Mixxx im.riot.Riot
     # Megasync
     wget https://mega.nz/linux/repo/openSUSE_Tumbleweed/x86_64/megasync-openSUSE_Tumbleweed.x86_64.rpm
     sudo zypper install "megasync-openSUSE_Tumbleweed.x86_64.rpm"
@@ -72,6 +72,7 @@ function configure_user() {
     # Configure bash
     echo "Configuring bash..."
     echo "fastfetch" >> ~/.bashrc
+    echo 'alias system-update="sudo zypper refresh; sudo zypper dup && flatpak update && sudo zypper clean"' >> ~/.bashrc
     # Configure GNOME
     echo "Configuring GNOME..."
     read -p "Set dark theme [y/N]: " DARK
@@ -138,7 +139,10 @@ function configure_system() {
     sudo firewall-cmd --zone=public --add-service=ipp --permanent
     sudo firewall-cmd --zone=public --add-service=ipp-client --permanent
     sudo firewall-cmd --zone=public --add-service=dns --permanent
+    sudo firewall-cmd --zone=public --add-service=dhcp --permanent
     sudo firewall-cmd --zone=public --add-service=mdns --permanent
+    sudo firewall-cmd --zone=public --add-protocol=icmp --permanent
+    sudo firewall-cmd --zone=public --add-protocol=ipv6-icmp --permanent
     # Enable Remote Desktop Connection
     read -p "Enable Remote Desktop Connection (rdp and ssh) [y/N]: " REMOTE
     if [ "$REMOTE" == "y" ]; then
@@ -359,6 +363,7 @@ function setup_zsh() {
         fi
         # Configure
         sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a fastfetch' ~/.zshrc
+        echo 'alias system-update="sudo zypper refresh; sudo zypper dup && flatpak update && sudo zypper clean"' >> ~/.zshrc
     fi
 }
 
