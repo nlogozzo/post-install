@@ -18,7 +18,7 @@ function upgrade() {
     echo "===Upgrading System==="
     sleep 1
     sudo zypper refresh
-    sudo zypper dup
+    sudo zypper dup --allow-vendor-change
 }
 
 function install_apps() {
@@ -26,10 +26,10 @@ function install_apps() {
     sleep 1
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
-    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk java-17-openjdk-devel blueprint-compiler gtk4-devel gtk4-tools libadwaita-devel glib2-devel webp-pixbuf-loader steam fastfetch curl libcurl-devel unzip git nano cabextract fontconfig python311-devel python311-pip python311-python-lsp-server gimp inkscape krita openssl openssl-devel ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool gettext-devel sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libxml2-devel libsecret-devel libuuid-devel libblas3 lapack liblapack3 fftw3 libidn2 libpodofo-devel adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-network-displays docker distrobox
+    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk blueprint-compiler gtk4-tools webp-pixbuf-loader steam fastfetch curl unzip git nano cabextract fontconfig python311-python-lsp-server gimp inkscape krita openssl ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libblas3 lapack liblapack3 fftw3 libidn2 adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-network-displays docker distrobox
+    sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
-    opi codecs
     # Flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
@@ -45,10 +45,10 @@ function install_apps() {
     rm -rf Android.Messages-v5.4.2-linux-x86_64.rpm
     # JetBrains Toolbox
     cd /opt/
-    sudo wget https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-2.2.3.20090.tar.gz
-    sudo tar -xvzf jetbrains-toolbox-2.2.3.20090.tar.gz
-    sudo mv jetbrains-toolbox-2.2.3.20090 jetbrains-toolbox
-    sudo rm -rf jetbrains-toolbox-2.2.3.20090.tar.gz
+    sudo wget https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-2.3.1.31116.tar.gz
+    sudo tar -xvzf jetbrains-toolbox-2.3.1.31116.tar.gz
+    sudo mv jetbrains-toolbox-2.3.1.31116 jetbrains-toolbox
+    sudo rm -rf jetbrains-toolbox-2.3.1.31116.tar.gz
     ./jetbrains-toolbox/jetbrains-toolbox
     cd ~
     # Cleanup
@@ -72,7 +72,7 @@ function configure_user() {
     # Configure bash
     echo "Configuring bash..."
     echo "fastfetch" >> ~/.bashrc
-    echo 'alias system-update="sudo zypper refresh; sudo zypper dup && flatpak update && sudo zypper clean"' >> ~/.bashrc
+    echo 'alias system-update="sudo zypper refresh; sudo zypper dup --allow-vendor-change; flatpak update; sudo zypper clean"' >> ~/.bashrc
     # Configure GNOME
     echo "Configuring GNOME..."
     read -p "Set dark theme [y/N]: " DARK
@@ -220,7 +220,7 @@ function install_cpp_libraries() {
         # matplotplusplus
         echo "Matplot++..."
         cd ~
-        git clone --depth 1 --branch "v1.2.0" https://github.com/alandefreitas/matplotplusplus
+        git clone --depth 1 --branch "v1.2.1" https://github.com/alandefreitas/matplotplusplus
         mkdir -p matplotplusplus/build
         cd matplotplusplus/build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DMATPLOTPP_BUILD_EXAMPLES="OFF" -DMATPLOTPP_BUILD_TESTS="OFF" -DCMAKE_INTERPROCEDURAL_OPTIMIZATION="ON" -DCMAKE_INSTALL_PREFIX=/usr
@@ -363,7 +363,7 @@ function setup_zsh() {
         fi
         # Configure
         sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a fastfetch' ~/.zshrc
-        echo 'alias system-update="sudo zypper refresh; sudo zypper dup && flatpak update && sudo zypper clean"' >> ~/.zshrc
+        echo 'alias system-update="sudo zypper refresh; sudo zypper dup --allow-vendor-change; flatpak update; sudo zypper clean"' >> ~/.zshrc
     fi
 }
 
