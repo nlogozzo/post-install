@@ -143,14 +143,18 @@ function configure_system() {
     sudo firewall-cmd --zone=public --add-service=mdns --permanent
     sudo firewall-cmd --zone=public --add-protocol=icmp --permanent
     sudo firewall-cmd --zone=public --add-protocol=ipv6-icmp --permanent
-    # Enable Remote Desktop Connection
-    read -p "Enable Remote Desktop Connection (rdp and ssh) [y/N]: " REMOTE
+    # Enable SSH Connection
+    read -p "Enable SSH Connection [y/N]: " REMOTE
     if [ "$REMOTE" == "y" ]; then
         sudo systemctl enable sshd
         sudo systemctl start sshd
+        sudo firewall-cmd --zone=public --add-service=ssh --permanent
+    fi
+    # Enable Remote Desktop Connection
+    read -p "Enable Remote Desktop Connection (rdp) [y/N]: " REMOTE
+    if [ "$REMOTE" == "y" ]; then
         grdctl rdp enable
         grdctl rdp disable-view-only
-        sudo firewall-cmd --zone=public --add-service=ssh --permanent
         sudo firewall-cmd --zone=public --add-service=rdp --permanent
     fi
     sudo firewall-cmd --reload
