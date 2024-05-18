@@ -18,7 +18,7 @@ function upgrade() {
     echo "===Upgrading System==="
     sleep 1
     sudo zypper refresh
-    sudo zypper dup --allow-vendor-change
+    sudo zypper dup
 }
 
 function install_apps() {
@@ -72,7 +72,7 @@ function configure_user() {
     # Configure bash
     echo "Configuring bash..."
     echo "fastfetch" >> ~/.bashrc
-    echo 'alias system-update="sudo zypper refresh; sudo zypper dup --allow-vendor-change; flatpak update; sudo zypper clean"' >> ~/.bashrc
+    echo 'alias system-update="sudo zypper refresh; sudo zypper dup; flatpak update; sudo zypper clean"' >> ~/.bashrc
     # Configure GNOME
     echo "Configuring GNOME..."
     read -p "Set dark theme [y/N]: " DARK
@@ -367,7 +367,7 @@ function setup_zsh() {
         fi
         # Configure
         sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a fastfetch' ~/.zshrc
-        echo 'alias system-update="sudo zypper refresh; sudo zypper dup --allow-vendor-change; flatpak update; sudo zypper clean"' >> ~/.zshrc
+        echo 'alias system-update="sudo zypper refresh; sudo zypper dup; flatpak update; sudo zypper clean"' >> ~/.zshrc
     fi
 }
 
@@ -390,6 +390,7 @@ echo "prompts multiple times."
 echo
 read -p "Continue [y/N]: " CONTINUE
 if [ "$CONTINUE" == "y" ]; then
+    rm -rf ~/bin
     enable_repos
     upgrade
     install_apps
@@ -400,7 +401,6 @@ if [ "$CONTINUE" == "y" ]; then
     install_surface_kernel
     install_printers
     setup_lazyvim
-    setup_distrobox
     setup_zsh
     display_links
     echo "===Reboot==="
