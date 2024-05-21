@@ -27,7 +27,7 @@ function install_apps() {
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
     sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk blueprint-compiler gtk4-tools webp-pixbuf-loader steam fastfetch curl unzip git nano cabextract fontconfig python311-python-lsp-server gimp inkscape krita openssl ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libblas3 lapack liblapack3 fftw3 libidn2 adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-network-displays docker distrobox
-    sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel
+    sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel libboost_date_time-devel
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
     # Flatpak
@@ -221,16 +221,6 @@ function install_cpp_libraries() {
         sudo mkdir -p /usr/include/maddy
         sudo mv maddy/include/maddy/* /usr/include/maddy
         rm -rf ~/maddy
-        # matplotplusplus
-        echo "Matplot++..."
-        cd ~
-        git clone --depth 1 --branch "v1.2.1" https://github.com/alandefreitas/matplotplusplus
-        mkdir -p matplotplusplus/build
-        cd matplotplusplus/build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DMATPLOTPP_BUILD_EXAMPLES="OFF" -DMATPLOTPP_BUILD_TESTS="OFF" -DCMAKE_INTERPROCEDURAL_OPTIMIZATION="ON" -DCMAKE_INSTALL_PREFIX=/usr
-        cmake --build .
-        sudo cmake --install .
-        rm -rf ~/matplotplusplus
         # rapidcsv
         echo "Rapidcsv..."
         cd ~
