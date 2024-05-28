@@ -5,7 +5,7 @@
 
 # Before starting, make sure WSL is running the latest version
 # In PowerShell run the following:
-wsl.exe --update --pre-release
+wsl.exe --update
 
 # Update
 sudo zypper refresh
@@ -52,6 +52,11 @@ sudo zypper dup
 sudo zypper install opi git git-lfs gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk blueprint-compiler webp-pixbuf-loader fastfetch curl unzip cabextract fontconfig python311-python-lsp-server ffmpeg aria2 yt-dlp yelp yelp-tools yelp-xsl cava intltool gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder libxml2 libblas3 lapack liblapack3 fftw3 libidn2 adw-gtk3 adw-gtk3-dark docker distrobox
 sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel libboost_date_time-devel
 
+# Setup User
+sudo usermod -a -G tomcat $USER
+sudo usermod -a -G lp $USER
+sudo usermod -a -G docker $USER
+
 # Restart WSL
 # In PowerShell run the following:
 wsl.exe --shutdown
@@ -63,12 +68,6 @@ flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flath
 flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 flatpak --user update
 flatpak --user install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier re.sonny.Workbench
-
-# Setup User
-sudo usermod -a -G tomcat $USER
-sudo usermod -a -G lp $USER
-sudo usermod -a -G docker $USER
-sudo usermod -a -G wheel $USER
 
 # Setup Fonts
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'
