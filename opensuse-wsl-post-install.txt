@@ -88,6 +88,65 @@ dotnet tool install --global GetText.NET.Extractor
 dotnet tool install --global JetBrains.ReSharper.GlobalTools
 dotnet tool install --global Nickvision.FlatpakGenerator
 
+# Install C++ Libraries
+# gtest
+echo "Gtest..."
+cd ~
+git clone --depth 1 --branch "v1.14.0" https://github.com/google/googletest
+mkdir -p googletest/build
+cd googletest/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+rm -rf ~/googletest
+# jsoncpp
+echo "Jsoncpp..."
+cd ~
+git clone --depth 1 --branch "1.9.5" https://github.com/open-source-parsers/jsoncpp
+mkdir -p jsoncpp/build
+cd jsoncpp/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DJSONCPP_WITH_TESTS="OFF" -DJSONCPP_WITH_CMAKE_PACKAGE="ON" -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+rm -rf ~/jsoncpp
+# maddy
+echo "Maddy..."
+cd ~
+git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
+sudo mkdir -p /usr/include/maddy
+sudo mv maddy/include/maddy/* /usr/include/maddy
+rm -rf ~/maddy
+# rapidcsv
+echo "Rapidcsv..."
+cd ~
+git clone --depth 1 --branch "v8.82" https://github.com/d99kris/rapidcsv
+mkdir -p rapidcsv/build
+cd rapidcsv/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+sudo cmake --install .
+rm -rf ~/rapidcsv
+# libxml++
+echo "Libxml++..."
+cd ~
+git clone --depth 1 --branch "5.2.0" https://github.com/libxmlplusplus/libxmlplusplus
+cd libxmlplusplus
+meson setup --prefix /usr --libdir lib64 --reconfigure -Dmaintainer-mode=false out-linux .
+cd out-linux
+ninja
+sudo ninja install
+rm -rf ~/libxmlplusplus
+# libnick
+echo "Libnick..."
+cd ~
+git clone --depth 1 --branch "2024.5.1" https://github.com/NickvisionApps/libnick/
+mkdir -p libnick/build
+cd libnick/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+rm -rf ~/libnick
+cd ~
+
 # Setup Winhome Link
 ln -s /mnt/c/Users/nlogo ~/winhome
 
