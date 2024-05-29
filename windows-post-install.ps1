@@ -1,6 +1,4 @@
 #Requires -RunAsAdministrator
-# Replace nlogo with your windows username
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 echo "==Installing Apps=="
 winget install --id=Microsoft.Office -e
 winget install --id=Foxit.FoxitReader -e
@@ -17,17 +15,18 @@ winget install --id=EpicGames.EpicGamesLauncher -e
 winget install WhatsApp -s msstore
 winget install --id 9P3JFPWWDZRC -s msstore
 winget install --id=JanDeDobbeleer.OhMyPosh -e
-winget install --id=mlocati.GetText  -e
+winget install --id=mlocati.GetText -e
+winget install --id=Fastfetch-cli.Fastfetch -e
+winget install --id=DEVCOM.JetBrainsMonoNerdFont -e
 winget upgrade --all
 echo "==Setting Environment Variables=="
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-[System.Environment]::SetEnvironmentVariable('VCPKG_DEFAULT_TRIPLET','x64-windows', 'User')
-[System.Environment]::SetEnvironmentVariable('VCPKG_ROOT','C:\Users\nlogo\OneDrive\Documents\Programming\vcpkg', 'User')
-echo "==Configuring OhMyPosh=="
+[System.Environment]::SetEnvironmentVariable("VCPKG_DEFAULT_TRIPLET","x64-windows", "User")
+[System.Environment]::SetEnvironmentVariable("VCPKG_ROOT","C:\Users\$env:UserName\OneDrive\Documents\Programming\vcpkg", "User")
+echo "==Configuring PowerShell=="
 New-Item -Path $PROFILE -Type File -Force
-echo "oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression"
-notepad $PROFILE
-oh-my-posh font install
+echo "fastfetch" | Out-File -FilePath $PROFILE
+echo 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression' | Out-File -Append -FilePath $PROFILE
 echo "==Minecraft=="
 Start-Process https://aka.ms/DownloadNewLauncher?ref=launcher
 echo "==Serato=="
