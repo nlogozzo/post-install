@@ -31,7 +31,7 @@ else
   sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
 fi
 sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a fastfetch' ~/.zshrc
-echo 'alias system-update="sudo zypper refresh; sudo zypper dup; flatpak update; sudo zypper clean"' >> ~/.zshrc
+echo 'alias system-update="sudo zypper refresh; sudo zypper dup; flatpak --user update; sudo zypper clean"' >> ~/.zshrc
 echo 'export AURA_DISABLE_NETCHECK=true' >> ~/.zshrc
 echo 'path+=~/.dotnet/tools' >> ~/.zshrc
 
