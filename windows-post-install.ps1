@@ -20,6 +20,7 @@ winget install --id=Fastfetch-cli.Fastfetch -e
 winget install --id=DEVCOM.JetBrainsMonoNerdFont -e
 winget install --id=Microsoft.PowerToys -e
 winget install --id 9WZDNCRDXF41 -s msstore
+winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 winget upgrade --all
 echo "==Setting Environment Variables=="
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
