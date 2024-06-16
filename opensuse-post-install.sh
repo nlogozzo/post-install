@@ -243,7 +243,7 @@ function install_cpp_libraries() {
         # libnick
         echo "Libnick..."
         cd ~
-        git clone --depth 1 --branch "2024.6.3" https://github.com/NickvisionApps/libnick/
+        git clone --depth 1 --branch "2024.6.6" https://github.com/NickvisionApps/libnick/
         mkdir -p libnick/build
         cd libnick/build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
