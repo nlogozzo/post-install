@@ -69,7 +69,7 @@ wsl.exe --shutdown
 flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 flatpak --user update
-flatpak --user install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier re.sonny.Workbench
+flatpak --user install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier re.sonny.Workbench org.gnome.design.IconLibrary com.github.tchx84.Flatseal
 
 # Setup Fonts
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'
@@ -140,7 +140,7 @@ rm -rf ~/libxmlplusplus
 # libnick
 echo "Libnick..."
 cd ~
-git clone --depth 1 --branch "2024.6.9" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2024.7.0" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
