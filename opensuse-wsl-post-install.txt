@@ -51,7 +51,7 @@ sudo zypper dup
 # Install Software
 sudo zypper install opi git git-lfs gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk blueprint-compiler webp-pixbuf-loader fastfetch curl unzip cabextract fontconfig python311-python-lsp-server ffmpeg aria2 yt-dlp yelp yelp-tools yelp-xsl cava intltool gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder libxml2 libblas3 lapack liblapack3 fftw3 libidn2 adw-gtk3 adw-gtk3-dark docker distrobox gnome-keyring xdg-user-dirs xdg-user-dirs-gtk python311-requirements-parser python311-pybind11
 sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel libboost_date_time-devel python311-pybind11-devel
-sudo zypper innstall --recommends -t pattern devel_qt6
+sudo zypper install --recommends -t pattern devel_qt6
 
 # Setup User
 sudo usermod -a -G tomcat $USER
