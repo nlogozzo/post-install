@@ -25,8 +25,9 @@ winget upgrade --all
 echo "==Setting Environment Variables=="
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 [System.Environment]::SetEnvironmentVariable("VCPKG_DEFAULT_TRIPLET","x64-windows", "User")
-[System.Environment]::SetEnvironmentVariable("VCPKG_ROOT","C:\Users\$env:UserName\OneDrive\Documents\Programming\vcpkg", "User")
+[System.Environment]::SetEnvironmentVariable("VCPKG_ROOT","C:\Users\$env:UserName\vcpkg", "User")
 [System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\$env:UserName\OneDrive\Documents\Programming", "User")
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "BingSearchEnabled" -Value 0 -Type DWord
 echo "==Configuring PowerShell=="
 New-Item -Path $PROFILE -Type File -Force
 echo "fastfetch" | Out-File -FilePath $PROFILE
