@@ -50,7 +50,7 @@ sudo zypper dup
 
 # Install Software
 sudo zypper install opi git git-lfs gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk blueprint-compiler webp-pixbuf-loader fastfetch curl unzip cabextract fontconfig python311-python-lsp-server ffmpeg aria2 yt-dlp yelp yelp-tools yelp-xsl cava intltool gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder libxml2 libblas3 lapack liblapack3 fftw3 libidn2 adw-gtk3 adw-gtk3-dark docker distrobox gnome-keyring xdg-user-dirs xdg-user-dirs-gtk python311-requirements-parser python311-pybind11
-sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel libboost_date_time-devel python311-pybind11-devel
+sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel libboost_date_time-devel python311-pybind11-devel jsoncpp-devel gtest rapidcsv-devel
 sudo zypper install --recommends -t pattern devel_qt6
 
 # Setup User
@@ -92,26 +92,6 @@ dotnet tool install --global JetBrains.ReSharper.GlobalTools
 dotnet tool install --global Nickvision.FlatpakGenerator
 
 # Install C++ Libraries
-# gtest
-echo "Gtest..."
-cd ~
-git clone --depth 1 --branch "v1.14.0" https://github.com/google/googletest
-mkdir -p googletest/build
-cd googletest/build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-cmake --build .
-sudo cmake --install .
-rm -rf ~/googletest
-# jsoncpp
-echo "Jsoncpp..."
-cd ~
-git clone --depth 1 --branch "1.9.5" https://github.com/open-source-parsers/jsoncpp
-mkdir -p jsoncpp/build
-cd jsoncpp/build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DJSONCPP_WITH_TESTS="OFF" -DJSONCPP_WITH_CMAKE_PACKAGE="ON" -DCMAKE_INSTALL_PREFIX=/usr
-cmake --build .
-sudo cmake --install .
-rm -rf ~/jsoncpp
 # maddy
 echo "Maddy..."
 cd ~
@@ -119,15 +99,6 @@ git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
 sudo mkdir -p /usr/include/maddy
 sudo mv maddy/include/maddy/* /usr/include/maddy
 rm -rf ~/maddy
-# rapidcsv
-echo "Rapidcsv..."
-cd ~
-git clone --depth 1 --branch "v8.83" https://github.com/d99kris/rapidcsv
-mkdir -p rapidcsv/build
-cd rapidcsv/build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-sudo cmake --install .
-rm -rf ~/rapidcsv
 # libxml++
 echo "Libxml++..."
 cd ~

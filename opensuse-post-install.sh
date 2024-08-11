@@ -27,7 +27,7 @@ function install_apps() {
     sudo zypper install --type pattern devel_basis devel_C_C++ kvm_server kvm_tools devel_qt6
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
     sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs github-desktop gcc gcc-c++ clang-tools rust cmake meson ninja dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk blueprint-compiler gtk4-tools webp-pixbuf-loader steam fastfetch curl unzip git nano cabextract fontconfig python311-python-lsp-server gimp inkscape krita openssl ffmpeg aria2 yt-dlp geary yelp yelp-tools yelp-xsl cava intltool sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 nodejs20 npm20 dblatex xmlgraphics-fop mm-common ruby tomcat flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 libblas3 lapack liblapack3 fftw3 libidn2 adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-network-displays docker distrobox power-profiles-daemon python311-requirements-parser python311-pybind11
-    sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel libboost_date_time-devel python311-pybind11-devel
+    sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel libpodofo-devel libboost_date_time-devel python311-pybind11-devel jsoncpp-devel gtest rapidcsv-devel
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
     # Flatpak
@@ -194,26 +194,6 @@ function install_cpp_libraries() {
     echo "===C++ Libraries==="
     read -p "Build and install C++ libraries [y/N]: " BUILD
     if [ "$BUILD" == "y" ]; then
-        # gtest
-        echo "Gtest..."
-        cd ~
-        git clone --depth 1 --branch "v1.14.0" https://github.com/google/googletest
-        mkdir -p googletest/build
-        cd googletest/build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-        cmake --build .
-        sudo cmake --install .
-        rm -rf ~/googletest
-        # jsoncpp
-        echo "Jsoncpp..."
-        cd ~
-        git clone --depth 1 --branch "1.9.5" https://github.com/open-source-parsers/jsoncpp
-        mkdir -p jsoncpp/build
-        cd jsoncpp/build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DJSONCPP_WITH_TESTS="OFF" -DJSONCPP_WITH_CMAKE_PACKAGE="ON" -DCMAKE_INSTALL_PREFIX=/usr
-        cmake --build .
-        sudo cmake --install .
-        rm -rf ~/jsoncpp
         # maddy
         echo "Maddy..."
         cd ~
@@ -221,15 +201,6 @@ function install_cpp_libraries() {
         sudo mkdir -p /usr/include/maddy
         sudo mv maddy/include/maddy/* /usr/include/maddy
         rm -rf ~/maddy
-        # rapidcsv
-        echo "Rapidcsv..."
-        cd ~
-        git clone --depth 1 --branch "v8.83" https://github.com/d99kris/rapidcsv
-        mkdir -p rapidcsv/build
-        cd rapidcsv/build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-        sudo cmake --install .
-        rm -rf ~/rapidcsv
         # libxml++
         echo "Libxml++..."
         cd ~
