@@ -36,17 +36,20 @@ echo "fastfetch" >> ~/.bashrc
 # Install Software
 sudo add-apt-repository universe
 sudo add-apt-repository ppa:flatpak/stable
+sudo add-apt-repository ppa:tomtomtom/yt-dlp
+sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg7
 sudo apt update -y
-sudo apt install -y firefox xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev libsecret-1-dev dbus-x11 gnome-keyring
+sudo apt install -y firefox xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev libsecret-1-dev dbus-x11 gnome-keyring yt-dlp aria2 ffmpeg
  
 # Install brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ~/.bashrc
 echo 'export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:$XDG_DATA_DIRS"' >> ~/.bashrc
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-echo "export PKG_CONFIG_PATH=/home/linuxbrew/.linuxbrew/lib/pkgconfig:$PKG_CONFIG_PATH:/usr/lib/pkgconfig:$PKG_CONFIG_PATH" >> ~/.bashrc
-echo "export LD_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib:$LD_LIBRARY_PATH:/usr/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
-brew install gcc cmake gtk4 libadwaita glib libxml++@5
+echo "export PKG_CONFIG_PATH=/usr/lib/pkgconfig:/home/linuxbrew/.linuxbrew/lib/pkgconfig:$PKG_CONFIG_PATH" >> ~/.bashrc
+echo 'export LDFLAGS="-L/home/linuxbrew/.linuxbrew/lib"' >> ~/.bashrc
+echo 'export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/include"' >> ~/.bashrc
+brew install gcc cmake gtk4 libadwaita glib libxml++@5 boost
 
 # Install adw-gtk3
 cd ~
@@ -64,6 +67,17 @@ git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
 sudo mkdir -p /usr/include/maddy
 sudo mv maddy/include/maddy/* /usr/include/maddy
 rm -rf ~/maddy
+
+# Install libnick
+cd ~
+git clone --depth 1 --branch "2024.8.1" https://github.com/NickvisionApps/libnick/
+mkdir -p libnick/build
+cd libnick/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+rm -rf ~/libnick
+cd ~
 
 # Setup Keyring Unlock
 echo 'read -rsp "Password: " pass' >> ~/.bashrc
