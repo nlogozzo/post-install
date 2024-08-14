@@ -204,7 +204,7 @@ function install_cpp_libraries() {
         # libxml++
         echo "Libxml++..."
         cd ~
-        git clone --depth 1 --branch "5.2.0" https://github.com/libxmlplusplus/libxmlplusplus
+        git clone --depth 1 --branch "5.4.0" https://github.com/libxmlplusplus/libxmlplusplus
         cd libxmlplusplus
         meson setup --prefix /usr --libdir lib64 --reconfigure -Dmaintainer-mode=false out-linux .
         cd out-linux
