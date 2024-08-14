@@ -8,7 +8,7 @@ wsl.exe --update
 
 # Update
 sudo apt update -y && sudo apt upgrade -y
-sudo apt install -y wget unzip git nano software-properties-common build-essential
+sudo apt install -y wget unzip git nano software-properties-common build-essential procps curl file
 
 # Ensure Systemd
 sudo nano /etc/wsl.conf
@@ -38,7 +38,7 @@ echo "fastfetch" >> ~/.bashrc
 # Install Software
 sudo add-apt-repository universe
 sudo apt update -y
-sudo apt install -y firefox g++-12 gcc-12 xdg-user-dirs xdg-user-dirs-gtk gettext yelp-tools tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ninja-build git meson sassc
+sudo apt install -y firefox xdg-user-dirs xdg-user-dirs-gtk gettext yelp-tools tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ninja-build git meson sassc
 
 # Install adw-gtk3
 git clone https://github.com/lassekongo83/adw-gtk3.git
@@ -53,6 +53,19 @@ rm -rf adw-gtk3
 sudo add-apt-repository ppa:flatpak/stable
 sudo apt update -y
 sudo apt install -y flatpak libfuse2 flatpak-builder
+
+# Install brew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/nlogozzo/.bashrc
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+brew install gcc
+
+# Restart WSL
+# In PowerShell run the following:
+wsl.exe --shutdown
+# Start distro again
+
+# Configure Flatpak
 flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 flatpak --user update
@@ -63,8 +76,8 @@ xdg-user-dirs-update
 xdg-user-dirs-gtk-update
 sudo locale-gen en_US.UTF-8
 sudo update-locale LANG=en_US.UTF-8
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+sudo update-alternatives --install /usr/bin/gcc gcc /home/linuxbrew/.linuxbrew/bin/gcc-14 100
+sudo update-alternatives --install /usr/bin/g++ g++ /home/linuxbrew/.linuxbrew/bin/g++-14 100
 git config --global submodule.recurse true
 git config --global protocol.file.allow always
 git config --global http.postBuffer 524288000
