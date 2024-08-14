@@ -1,0 +1,73 @@
+# NOTE
+# Replace 'nlogozzo' with your WSL username
+# Replace 'nlogo' with your Windows username (Found in C:\Users)
+
+# Before starting, make sure WSL is running the latest version
+# In PowerShell run the following:
+wsl.exe --update
+
+# Update
+sudo apt update -y && sudo apt upgrade -y
+sudo apt install -y wget unzip git nano fastfetch software-properties-common build-essential
+
+# Ensure Systemd
+sudo nano /etc/wsl.conf
+# Add the following lines:
+[boot]
+systemd=true
+
+# Restart WSL
+# In PowerShell run the following:
+wsl.exe --shutdown
+# Start distro again
+
+# Setup Terminal Look & Feel
+sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
+sudo apt update -y
+sudo apt install -y fastfetch
+sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+sudo chmod +x /usr/local/bin/oh-my-posh
+mkdir ~/.poshthemes
+wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
+chmod u+rw ~/.poshthemes/*.json
+rm ~/.poshthemes/themes.zip
+echo 'eval "$(oh-my-posh --init --shell bash --config ~/.poshthemes/jandedobbeleer.omp.json)"' >> ~/.bashrc
+echo "fastfetch" >> ~/.bashrc
+
+# Install Software
+sudo add-apt-repository universe
+sudo apt update -y
+sudo apt install -y firefox g++-12 gcc-12 xdg-user-dirs xdg-user-dirs-gtk gettext yelp-tools tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ninja-build git meson sassc
+
+# Install adw-gtk3
+git clone https://github.com/lassekongo83/adw-gtk3.git
+cd ~/adw-gtk3
+meson build
+cd build
+sudo ninja install
+cd ~
+rm -rf adw-gtk3
+
+# Install Flatpak
+sudo add-apt-repository ppa:flatpak/stable
+sudo apt update -y
+sudo apt install -y flatpak libfuse2 flatpak-builder
+flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+flatpak --user update
+flatpak --user install -y flathub org.gnome.Sdk//46 org.gnome.Platform//46 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier re.sonny.Workbench org.gnome.design.IconLibrary com.github.tchx84.Flatseal
+
+# Configure User
+xdg-user-dirs-update
+xdg-user-dirs-gtk-update
+sudo locale-gen en_US.UTF-8
+sudo update-locale LANG=en_US.UTF-8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+git config --global submodule.recurse true
+git config --global protocol.file.allow always
+git config --global http.postBuffer 524288000
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+ln -s /mnt/c/Users/nlogo ~/winhome

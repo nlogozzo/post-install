@@ -17,7 +17,6 @@ winget install --id=JanDeDobbeleer.OhMyPosh -e
 winget install --id=mlocati.GetText -e
 winget install --id=Fastfetch-cli.Fastfetch -e
 winget install --id=DEVCOM.JetBrainsMonoNerdFont -e
-winget install --id=Microsoft.PowerToys -e
 winget install --id 9WZDNCRDXF41 -s msstore
 winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 winget install --id=DimitriVanHeesch.Doxygen -e
@@ -37,4 +36,4 @@ Start-Process https://aka.ms/DownloadNewLauncher?ref=launcher
 echo "==Serato=="
 Start-Process https://serato.com/dj/pro/downloads
 echo "==Installing WSL=="
-wsl --install --d openSUSE-Tumbleweed
+wsl --install --d Ubuntu
