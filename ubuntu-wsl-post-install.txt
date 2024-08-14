@@ -1,23 +1,13 @@
-# NOTE
-# Replace 'nlogozzo' with your WSL username
-# Replace 'nlogo' with your Windows username (Found in C:\Users)
+# THIS IS INTENDED FOR UBUNTU (22.04 --> 24.04) WSL
 
 # Before starting, make sure WSL is running the latest version
 # In PowerShell run the following:
 wsl.exe --update
 
 # Update
-sudo apt update -y && sudo apt upgrade -y
-sudo apt install -y wget unzip git nano software-properties-common build-essential procps curl file
-
-# Ensure Systemd
-sudo nano /etc/wsl.conf
-# Add the following lines:
-[boot]
-systemd=true
-
-# Restart WSL
+sudo apt update -y && sudo apt full-upgrade -y && sudo do-release-upgrade -d
 cd /mnt/c/ && cmd.exe /c start "Rebooting WSL" cmd /c "timeout 5 && title "Ubuntu" && wsl -d Ubuntu" && wsl.exe --terminate Ubuntu
+sudo apt install -y wget unzip git nano software-properties-common build-essential procps curl file
 
 # Setup Terminal Look & Feel
 sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
@@ -34,23 +24,11 @@ echo 'eval "$(oh-my-posh --init --shell bash --config ~/.poshthemes/jandedobbele
 echo "fastfetch" >> ~/.bashrc
 
 # Install Software
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo add-apt-repository universe
 sudo add-apt-repository ppa:flatpak/stable
 sudo add-apt-repository ppa:tomtomtom/yt-dlp
-sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg7
 sudo apt update -y
-sudo apt install -y firefox gcc-13 g++-13 xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev libsecret-1-dev dbus-x11 gnome-keyring yt-dlp aria2 ffmpeg x11proto-core-dev qt6-base-dev qt6-tools-dev libqt6svg6-dev libgl1-mesa-dev
- 
-# Install brew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ~/.bashrc
-echo 'export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:$XDG_DATA_DIRS"' >> ~/.bashrc
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-echo "export PKG_CONFIG_PATH=/usr/lib/pkgconfig:/home/linuxbrew/.linuxbrew/lib/pkgconfig:$PKG_CONFIG_PATH" >> ~/.bashrc
-echo 'export LDFLAGS="-L/home/linuxbrew/.linuxbrew/lib"' >> ~/.bashrc
-echo 'export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/include"' >> ~/.bashrc
-brew install cmake gtk4 libadwaita glib libxml++@5 boost python-setuptools pygobject3 libsecret
+sudo apt install -y firefox gcc g++ cmake xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev libsecret-1-dev dbus-x11 gnome-keyring yt-dlp aria2 ffmpeg x11proto-core-dev qt6-base-dev qt6-tools-dev libqt6svg6-dev libgl1-mesa-dev libgtk-4-dev libadwaita-1-dev libboost-all-dev blueprint-compiler
 
 # Install adw-gtk3
 cd ~
@@ -62,26 +40,28 @@ sudo ninja install
 cd ~
 rm -rf adw-gtk3
 
-# Install blueprint-compiler
+# Install libxml++
 cd ~
-git clone https://gitlab.gnome.org/jwestman/blueprint-compiler
-cd blueprint-compiler
-meson build
-cd build
+git clone --depth 1 --branch "5.4.0" https://github.com/libxmlplusplus/libxmlplusplus
+cd libxmlplusplus
+meson setup --prefix /usr --libdir lib --reconfigure -Dmaintainer-mode=false out-linux .
+cd out-linux
+ninja
 sudo ninja install
 cd ~
-rm -rf blueprint-compiler
+rm -rf ~/libxmlplusplus
 
 # Install maddy
 cd ~
 git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
 sudo mkdir -p /usr/include/maddy
 sudo mv maddy/include/maddy/* /usr/include/maddy
+cd ~
 rm -rf ~/maddy
 
 # Install libnick
 cd ~
-git clone --depth 1 --branch "2024.8.1" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2024.8.2" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
@@ -110,9 +90,6 @@ xdg-user-dirs-update
 xdg-user-dirs-gtk-update
 sudo locale-gen en_US.UTF-8
 sudo update-locale LANG=en_US.UTF-8
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
-sudo update-alternatives --install /usr/bin/cmake cmake /home/linuxbrew/.linuxbrew/bin/cmake 100
 git config --global submodule.recurse true
 git config --global protocol.file.allow always
 git config --global http.postBuffer 524288000
