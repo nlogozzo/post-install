@@ -8,7 +8,7 @@ wsl.exe --update
 
 # Update
 sudo apt update -y && sudo apt upgrade -y
-sudo apt install -y wget unzip git nano fastfetch software-properties-common build-essential
+sudo apt install -y wget unzip git nano software-properties-common build-essential
 
 # Ensure Systemd
 sudo nano /etc/wsl.conf
