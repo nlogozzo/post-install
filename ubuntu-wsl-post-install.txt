@@ -44,8 +44,8 @@ sudo apt install -y firefox xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 fla
 (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ~/.bashrc
 echo 'export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:$XDG_DATA_DIRS"' >> ~/.bashrc
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-echo "export PKG_CONFIG_PATH=/home/linuxbrew/.linuxbrew/lib/pkgconfig:$PKG_CONFIG_PATH" >> ~/.bashrc
-echo "export LD_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
+echo "export PKG_CONFIG_PATH=/home/linuxbrew/.linuxbrew/lib/pkgconfig:$PKG_CONFIG_PATH:/usr/lib/pkgconfig:$PKG_CONFIG_PATH" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib:$LD_LIBRARY_PATH:/usr/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
 brew install gcc cmake gtk4 libadwaita glib libxml++@5
 
 # Install adw-gtk3
@@ -69,6 +69,7 @@ rm -rf ~/maddy
 echo 'read -rsp "Password: " pass' >> ~/.bashrc
 echo 'export $(echo -n "$pass" | gnome-keyring-daemon --unlock)' >> ~/.bashrc
 echo 'unset pass' >>  ~/.bashrc
+echo 'echo ""' >> ~/.bashrc
 
 # Restart WSL
 cd /mnt/c/ && cmd.exe /c start "Rebooting WSL" cmd /c "timeout 5 && title "Ubuntu" && wsl -d Ubuntu" && wsl.exe --terminate Ubuntu
