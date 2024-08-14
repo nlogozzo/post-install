@@ -34,12 +34,13 @@ echo 'eval "$(oh-my-posh --init --shell bash --config ~/.poshthemes/jandedobbele
 echo "fastfetch" >> ~/.bashrc
 
 # Install Software
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo add-apt-repository universe
 sudo add-apt-repository ppa:flatpak/stable
 sudo add-apt-repository ppa:tomtomtom/yt-dlp
 sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg7
 sudo apt update -y
-sudo apt install -y firefox xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev libsecret-1-dev dbus-x11 gnome-keyring yt-dlp aria2 ffmpeg
+sudo apt install -y firefox gcc-13 g++-13 xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev libsecret-1-dev dbus-x11 gnome-keyring yt-dlp aria2 ffmpeg x11proto-core-dev qt6-base-dev qt6-tools-dev libqt6svg6-dev libgl1-mesa-dev
  
 # Install brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -49,17 +50,27 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 echo "export PKG_CONFIG_PATH=/usr/lib/pkgconfig:/home/linuxbrew/.linuxbrew/lib/pkgconfig:$PKG_CONFIG_PATH" >> ~/.bashrc
 echo 'export LDFLAGS="-L/home/linuxbrew/.linuxbrew/lib"' >> ~/.bashrc
 echo 'export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/include"' >> ~/.bashrc
-brew install gcc cmake gtk4 libadwaita glib libxml++@5 boost
+brew install cmake gtk4 libadwaita glib libxml++@5 boost python-setuptools pygobject3 libsecret
 
 # Install adw-gtk3
 cd ~
 git clone https://github.com/lassekongo83/adw-gtk3.git
-cd ~/adw-gtk3
+cd adw-gtk3
 meson build
 cd build
 sudo ninja install
 cd ~
 rm -rf adw-gtk3
+
+# Install blueprint-compiler
+cd ~
+git clone https://gitlab.gnome.org/jwestman/blueprint-compiler
+cd blueprint-compiler
+meson build
+cd build
+sudo ninja install
+cd ~
+rm -rf blueprint-compiler
 
 # Install maddy
 cd ~
@@ -81,7 +92,7 @@ cd ~
 
 # Setup Keyring Unlock
 echo 'read -rsp "Password: " pass' >> ~/.bashrc
-echo 'export $(echo -n "$pass" | gnome-keyring-daemon --unlock)' >> ~/.bashrc
+echo 'export $(echo -n "$pass" | gnome-keyring-daemon --replace --unlock)' >> ~/.bashrc
 echo 'unset pass' >>  ~/.bashrc
 echo 'echo ""' >> ~/.bashrc
 
@@ -99,8 +110,8 @@ xdg-user-dirs-update
 xdg-user-dirs-gtk-update
 sudo locale-gen en_US.UTF-8
 sudo update-locale LANG=en_US.UTF-8
-sudo update-alternatives --install /usr/bin/gcc gcc /home/linuxbrew/.linuxbrew/bin/gcc-14 100
-sudo update-alternatives --install /usr/bin/g++ g++ /home/linuxbrew/.linuxbrew/bin/g++-14 100
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
 sudo update-alternatives --install /usr/bin/cmake cmake /home/linuxbrew/.linuxbrew/bin/cmake 100
 git config --global submodule.recurse true
 git config --global protocol.file.allow always
