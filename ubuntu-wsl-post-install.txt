@@ -17,9 +17,7 @@ sudo nano /etc/wsl.conf
 systemd=true
 
 # Restart WSL
-# In PowerShell run the following:
-wsl.exe --shutdown
-# Start distro again
+cd /mnt/c/ && cmd.exe /c start "Rebooting WSL" cmd /c "timeout 5 && title "Ubuntu" && wsl -d Ubuntu" && wsl.exe --terminate Ubuntu
 
 # Setup Terminal Look & Feel
 sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
@@ -39,7 +37,7 @@ echo "fastfetch" >> ~/.bashrc
 sudo add-apt-repository universe
 sudo add-apt-repository ppa:flatpak/stable
 sudo apt update -y
-sudo apt install -y firefox xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev
+sudo apt install -y firefox xdg-user-dirs xdg-user-dirs-gtk flatpak libfuse2 flatpak-builder gettext yelp-tools pkg-config tzdata locales dotnet-sdk-8.0 dotnet-runtime-8.0 ruby ninja-build meson sassc libcurl4-gnutls-dev libjsoncpp-dev libssl-dev libgtest-dev libgmock-dev libsecret-1-dev dbus-x11 gnome-keyring
  
 # Install brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -48,7 +46,7 @@ echo 'export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:$XDG_DATA_DIRS"' >>
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 echo "export PKG_CONFIG_PATH=/home/linuxbrew/.linuxbrew/lib/pkgconfig:$PKG_CONFIG_PATH" >> ~/.bashrc
 echo "export LD_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
-brew install gcc cmake gtk4 libadwaita glib libxml++@5 libsecret
+brew install gcc cmake gtk4 libadwaita glib libxml++@5
 
 # Install adw-gtk3
 cd ~
@@ -67,10 +65,13 @@ sudo mkdir -p /usr/include/maddy
 sudo mv maddy/include/maddy/* /usr/include/maddy
 rm -rf ~/maddy
 
+# Setup Keyring Unlock
+echo 'read -rsp "Password: " pass' >> ~/.bashrc
+echo 'export $(echo -n "$pass" | gnome-keyring-daemon --unlock)' >> ~/.bashrc
+echo 'unset pass' >>  ~/.bashrc
+
 # Restart WSL
-# In PowerShell run the following:
-wsl.exe --shutdown
-# Start distro again
+cd /mnt/c/ && cmd.exe /c start "Rebooting WSL" cmd /c "timeout 5 && title "Ubuntu" && wsl -d Ubuntu" && wsl.exe --terminate Ubuntu
 
 # Configure Flatpak
 flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
