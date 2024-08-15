@@ -7,7 +7,7 @@ sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y wget unzip git nano software-properties-common build-essential procps curl file
 
 # Setup Terminal Look & Feel
-sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
+sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
 sudo apt update -y
 sudo apt install -y fastfetch
 sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
@@ -70,7 +70,7 @@ distrobox enter fedora
 
 # Configure Fedora
 sudo dnf upgrade -y
-sudo dnf install -y fastfetch wget nano curl yt-dlp aria2 git gcc g++ cmake meson blueprint-compiler gettext yelp-tools glib-devel gtk4-devel gtk4-devel-tools libadwaita-devel openssl-devel libcurl-devel jsoncpp-devel gtest-devel gmock-devel gettext-devel libsecret-devel
+sudo dnf install -y fastfetch wget nano curl yt-dlp aria2 git gcc g++ cmake meson blueprint-compiler gettext yelp-tools glib-devel gtk4-devel gtk4-devel-tools libadwaita-devel openssl-devel libcurl-devel jsoncpp-devel gtest-devel gmock-devel gettext-devel libsecret-devel boost-devel
 sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
 sudo chmod +x /usr/local/bin/oh-my-posh
 sudo ln -s /run/host/run/systemd/system /run/systemd
