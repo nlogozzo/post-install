@@ -44,7 +44,6 @@ function configure_user() {
     echo "Configuring user groups..."
     sudo usermod -a -G tomcat $USER
     sudo usermod -a -G lp $USER
-    sudo usermod -a -G docker $USER
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
@@ -77,8 +76,6 @@ function configure_user() {
     gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
     gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
     gsettings set org.gnome.desktop.session idle-delay 900
-    gsettings set org.gtk.settings.file-chooser sort-directories-first true
-    gsettings set org.gtk.Settings.file-chooser show-hidden true
     # Firefox theme
     firefox
     echo "Installing Firefox theme..."

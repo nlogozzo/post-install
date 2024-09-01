@@ -35,5 +35,8 @@ echo "==Minecraft=="
 Start-Process https://aka.ms/DownloadNewLauncher?ref=launcher
 echo "==Serato=="
 Start-Process https://serato.com/dj/pro/downloads
-echo "==Installing WSL=="
-wsl --install --d Ubuntu
+echo "==WSL=="
+$install_wsl = Read-Host "Do you want to install WSL? (y/n) "
+if ($install_wsl -eq "y") {
+    wsl --install --d Ubuntu
+}
