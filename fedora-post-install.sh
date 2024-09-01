@@ -108,6 +108,11 @@ function configure_user() {
 function configure_system() {
     echo "===Configuring System==="
     sleep 1
+    # Configure hostname
+    echo "Configuring hostname..."
+    echo "Current hostname: $(hostname)"
+    read -p "New hostname: " NEWHOST
+    sudo hostnamectl set-hostname $NEWHOST
     # Enable and start services
     echo "Enabling and starting services..."
     sudo systemctl enable libvirtd
