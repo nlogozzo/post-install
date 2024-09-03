@@ -72,7 +72,7 @@ distrobox enter fedora
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
 sudo dnf upgrade -y
-sudo dnf install -y fastfetch wget nano curl yt-dlp aria2 git code gcc g++ gdb cmake meson blueprint-compiler gettext yelp-tools glib-devel gtk4-devel gtk4-devel-tools libadwaita-devel qt6-qtbase-devel qt6-qtsvg-devel openssl-devel libcurl-devel jsoncpp-devel gtest-devel gmock-devel gettext-devel libsecret-devel boost-devel dotnet-sdk-8.0 dotnet-runtime-8.0
+sudo dnf install -y fastfetch wget nano curl yt-dlp aria2 git code gcc g++ gdb cmake meson blueprint-compiler gettext yelp-tools glib-devel gtk4-devel gtk4-devel-tools libadwaita-devel qt6-qtbase-devel qt6-qtsvg-devel openssl-devel libcurl-devel json-devel gtest-devel gmock-devel gettext-devel libsecret-devel boost-devel dotnet-sdk-8.0 dotnet-runtime-8.0
 sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
 sudo chmod +x /usr/local/bin/oh-my-posh
 sudo ln -s /run/host/run/systemd/system /run/systemd
@@ -104,7 +104,7 @@ rm -rf ~/libxmlplusplus
 
 # Install libnick
 cd ~
-git clone --depth 1 --branch "2024.8.3" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2024.9.0" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
