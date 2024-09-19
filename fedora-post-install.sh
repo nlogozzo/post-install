@@ -24,10 +24,9 @@ function install_apps() {
     echo "Installing from repositories..."
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
-    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice evince code github-desktop gcc gcc-c++ gdb cmake meson ninja-build dotnet-sdk-8.0 dotnet-runtime-8.0 java-17-openjdk-devel blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig python3 python3-pip openssl joystick-support ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm dblatex fop mm-common ruby tomcat hunspell-it langpacks-it flatpak-builder dconf-editor texstudio -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice evince code github-desktop gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common ruby tomcat hunspell-it langpacks-it flatpak-builder dconf-editor texstudio -y --allowerasing
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
-    sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel blas-devel lapack-devel fftw-devel libidn-devel libxml2-devel mm-devel boost-devel -y --allowerasing
-    pip install requirements-parser
+    sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel libidn-devel libxml2-devel mm-devel boost-devel -y --allowerasing
     sudo dnf remove gnome-terminal -y
     # Flatpak
     echo "Installing from Flatpak..."
@@ -80,16 +79,6 @@ function configure_user() {
     firefox
     echo "Installing Firefox theme..."
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
-    # Install terminal font
-    echo "Installing JetBrains Mono Nerd font..."
-    mkdir -p ~/.local/share/fonts
-    cd ~/.local/share/fonts
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
-    unzip JetBrainsMono.zip
-    rm -rf JetBrainsMono.zip
-    fc-cache -f -v
-    cd ~
-    gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10'
 }
 
 function configure_system() {
@@ -104,11 +93,6 @@ function configure_system() {
     echo "Enabling and starting services..."
     sudo systemctl enable libvirtd
     sudo systemctl start libvirtd
-    # Remove Firefox Fedora defaults
-    echo "Removing Firefox Fedora defaults..."
-    sudo mv /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js-bak
-    sudo touch /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js
-    sudo chattr +i /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js
     # Enable SSH Connection
     read -p "Enable SSH Connection [y/N]: " REMOTE
     if [ "$REMOTE" == "y" ]; then
@@ -180,7 +164,7 @@ function install_cpp_libraries() {
         # libnick
         echo "Libnick..."
         cd ~
-        git clone --depth 1 --branch "2024.9.0" https://github.com/NickvisionApps/libnick/
+        git clone --depth 1 --branch "2024.9.2" https://github.com/NickvisionApps/libnick/
         mkdir -p libnick/build
         cd libnick/build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
