@@ -121,7 +121,8 @@ function install_gnome_extensions() {
             https://extensions.gnome.org/extension/1108/add-username-to-top-panel/
             https://extensions.gnome.org/extension/5500/auto-activities/
             https://extensions.gnome.org/extension/6096/smile-complementary-extension/
-            https://extensions.gnome.org/extension/5410/grand-theft-focus/)
+            https://extensions.gnome.org/extension/5410/grand-theft-focus/
+            https://extensions.gnome.org/extension/7048/rounded-window-corners-reborn/)
         for i in "${array[@]}"; do
             EXTENSION_ID=$(curl -s $i | grep -oP 'data-uuid="\K[^"]+')
             VERSION_TAG=$(curl -Lfs "https://extensions.gnome.org/extension-query/?search=$EXTENSION_ID" | jq '.extensions[0] | .shell_version_map | map(.pk) | max')
