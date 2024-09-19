@@ -39,6 +39,20 @@ function install_apps() {
     wget https://mega.nz/linux/repo/Fedora_40/x86_64/megasync-Fedora_40.x86_64.rpm -O megasync.rpm
     sudo dnf install megasync.rpm -y
     rm megasync.rpm
+    # keyd
+    read -p "Install keyd & remap Copilot key [y/N]: " KEYD
+    if [ "$KEYD" == "y" ]; then
+        sudo dnf copr enable alternateved/keyd
+        sudo dnf install keyd -y
+        sudo systemctl enable keyd
+        sudo systemctl start keyd
+        sudo touch /etc/keyd/default.conf
+        sudo echo "[ids]" >> /etc/keyd/default.conf
+        sudo echo "*" >> /etc/keyd/default.conf
+        sudo echo "[main]" >> /etc/keyd/default.conf
+        sudo echo "f23+leftshift+leftmeta = overload(control, esc)" >> /etc/keyd/default.conf
+        sudo keyd reload
+    fi
 }
 
 function configure_user() {
