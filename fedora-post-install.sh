@@ -39,6 +39,11 @@ function install_apps() {
     wget https://mega.nz/linux/repo/Fedora_40/x86_64/megasync-Fedora_40.x86_64.rpm -O megasync.rpm
     sudo dnf install megasync.rpm -y
     rm megasync.rpm
+    # Qt6
+    read -p "Install Qt6 [y/N]: " QT6
+    if [ "$QT6" == "y" ]; then
+        sudo dnf install "qt6-*" -y
+    fi
     # keyd
     read -p "Install keyd & remap Copilot key [y/N]: " KEYD
     if [ "$KEYD" == "y" ]; then
