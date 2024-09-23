@@ -25,14 +25,15 @@ function install_apps() {
     sudo zypper install --recommends --type pattern devel_basis devel_C_C++ kvm_server kvm_tools devel_qt6
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
     sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs gcc gcc-c++ clang-tools rust cmake meson ninja java-17-openjdk blueprint-compiler gtk4-tools webp-pixbuf-loader steam fastfetch curl unzip git nano cabextract fontconfig gimp inkscape krita openssl ffmpeg aria2 yt-dlp yelp yelp-tools yelp-xsl cava intltool sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 mm-common flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-remote-desktop
-    sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel boost-devel gtest rapidcsv-devel
+    sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel gtest rapidcsv-devel
+    sudo zypper install "libboost*"
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
     sudo zypper -n remove -u patterns-gnome-gnome_games
     # Flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    flatpak update
-    flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop
+    sudo flatpak update
+    sudo flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop
     # Megasync
     wget https://mega.nz/linux/repo/openSUSE_Tumbleweed/x86_64/megasync-openSUSE_Tumbleweed.x86_64.rpm
     sudo zypper install "megasync-openSUSE_Tumbleweed.x86_64.rpm"
@@ -71,7 +72,7 @@ function configure_user() {
     # Configure bash
     echo "Configuring bash..."
     echo "fastfetch" >> ~/.bashrc
-    echo 'alias system-update="sudo zypper refresh; sudo zypper dup; flatpak update"' >> ~/.bashrc
+    echo 'alias system-update="sudo zypper refresh; sudo zypper dup; sudo flatpak update"' >> ~/.bashrc
     # Configure GNOME settings
     echo "Configuring GNOME settings..."
     read -p "Set dark theme [y/N]: " DARK
@@ -140,7 +141,6 @@ function install_gnome_extensions() {
             https://extensions.gnome.org/extension/5500/auto-activities/
             https://extensions.gnome.org/extension/6096/smile-complementary-extension/
             https://extensions.gnome.org/extension/5410/grand-theft-focus/
-            https://extensions.gnome.org/extension/1319/gsconnect/
             https://extensions.gnome.org/extension/7048/rounded-window-corners-reborn/)
         for i in "${array[@]}"; do
             EXTENSION_ID=$(curl -s $i | grep -oP 'data-uuid="\K[^"]+')
@@ -225,7 +225,7 @@ function setup_zsh() {
         fi
         # Configure
         sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a fastfetch' ~/.zshrc
-        echo 'alias system-update="sudo zypper refresh; sudo zypper dup; flatpak update"' >> ~/.zshrc
+        echo 'alias system-update="sudo zypper refresh; sudo zypper dup; sudo flatpak update"' >> ~/.zshrc
     fi
 }
 
