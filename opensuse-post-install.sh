@@ -9,7 +9,7 @@ function enable_repos() {
     wget https://packages.microsoft.com/config/opensuse/15/prod.repo
     sudo mv prod.repo /etc/zypp/repos.d/microsoft-prod.repo
     sudo chown root:root /etc/zypp/repos.d/microsoft-prod.repo
-    zypper addrepo https://download.opensuse.org/repositories/home:Dead_Mozay/openSUSE_Tumbleweed/home:Dead_Mozay.repo
+    sudo zypper addrepo https://download.opensuse.org/repositories/home:Dead_Mozay/openSUSE_Tumbleweed/home:Dead_Mozay.repo
 }
 
 function upgrade() {
@@ -57,6 +57,8 @@ function install_apps() {
 function configure_user() {
     echo "===Configuring User==="
     sleep 1
+    # Remove bin folder
+    rm -rf ~/bin
     # Add user to groups
     echo "Configuring user groups..."
     sudo usermod -a -G tomcat $USER
