@@ -9,8 +9,6 @@ winget install --id=Git.Git -e
 winget install --id=Zoom.Zoom -e
 winget install --id=Discord.Discord -e
 winget install --id=Element.Element -e
-winget install --id=Valve.Steam -e
-winget install --id=EpicGames.EpicGamesLauncher -e
 winget install WhatsApp -s msstore
 winget install --id 9P3JFPWWDZRC -s msstore
 winget install --id=JanDeDobbeleer.OhMyPosh -e
@@ -20,6 +18,15 @@ winget install --id=DEVCOM.JetBrainsMonoNerdFont -e
 winget install --id 9WZDNCRDXF41 -s msstore
 winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 winget install --id=DimitriVanHeesch.Doxygen -e
+$games = Read-Host "Install games? (y/n) "
+if ($games -eq 'y') {
+    winget install --id=Valve.Steam -e
+    winget install --id=EpicGames.EpicGamesLauncher -e
+}
+$mega = Read-Host "Install megasync? (y/n) "
+if ($mega -eq 'y') {
+    winget install --id=Mega.MEGASync -e
+}
 winget upgrade --all
 echo "==Setting Environment Variables=="
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
