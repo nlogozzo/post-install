@@ -1,4 +1,8 @@
 echo "==Installing Apps=="
+$firefox = Read-Host "Install Firefox? (y/n) "
+if ($firefox -eq 'y') {
+    winget install --id=Mozilla.Firefox -e
+}
 winget install --id=Microsoft.Office -e
 winget install --id=Foxit.FoxitReader -e
 winget install --id=JRSoftware.InnoSetup -e

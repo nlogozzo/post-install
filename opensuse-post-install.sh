@@ -116,6 +116,7 @@ function configure_system() {
     echo "Enabling and starting services..."
     sudo systemctl enable libvirtd
     sudo systemctl start libvirtd
+    sudo virsh net-autostart default
     # Configure grub
     echo "Configuring grub..."
     sudo sed -i 's/GRUB_TIMEOUT=8/GRUB_TIMEOUT=0/g' /etc/default/grub
