@@ -22,7 +22,7 @@ function install_apps() {
     echo "Installing from repositories..."
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
-    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common ruby tomcat hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app gnome-console simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common ruby tomcat hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware -y --allowerasing
     sudo dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel libidn-devel libxml2-devel mm-devel boost-devel -y --allowerasing
     sudo dnf remove gnome-terminal -y
@@ -31,7 +31,7 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     flatpak update
-    flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord
+    flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music
     # MEGA
     cd ~
     wget https://mega.nz/linux/repo/Fedora_40/x86_64/megasync-Fedora_40.x86_64.rpm -O megasync.rpm
@@ -47,14 +47,14 @@ function install_apps() {
     if [ "$KEYD" == "y" ]; then
         sudo dnf copr enable alternateved/keyd
         sudo dnf install keyd -y
+        sudo mkdir -p /etc/keyd
+        sudo touch /etc/keyd/default.conf
+        echo "[ids]" | sudo tee -a /etc/keyd/default.conf
+        echo "*" | sudo tee -a /etc/keyd/default.conf
+        echo "[main]" | sudo tee -a /etc/keyd/default.conf
+        echo "f23+leftshift+leftmeta = overload(control, esc)" | sudo tee -a /etc/keyd/default.conf
         sudo systemctl enable keyd
         sudo systemctl start keyd
-        sudo touch /etc/keyd/default.conf
-        sudo echo "[ids]" >> /etc/keyd/default.conf
-        sudo echo "*" >> /etc/keyd/default.conf
-        sudo echo "[main]" >> /etc/keyd/default.conf
-        sudo echo "f23+leftshift+leftmeta = overload(control, esc)" >> /etc/keyd/default.conf
-        sudo keyd reload
     fi
 }
 

@@ -24,7 +24,7 @@ function install_apps() {
     sleep 1
     sudo zypper install --recommends --type pattern devel_basis devel_C_C++ kvm_server kvm_tools devel_qt6
     sudo zypper install MozillaFirefox-branding-upstream libreoffice-branding-upstream epiphany-branding-upstream gdm-branding-upstream gio-branding-upstream gnome-menus-branding-upstream gtk2-branding-upstream gtk3-branding-upstream gtk4-branding-upstream
-    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs gcc gcc-c++ clang-tools rust cmake meson ninja java-17-openjdk blueprint-compiler gtk4-tools webp-pixbuf-loader steam fastfetch curl unzip git nano cabextract fontconfig gimp inkscape krita openssl ffmpeg aria2 yt-dlp yelp yelp-tools yelp-xsl cava intltool sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 mm-common flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-remote-desktop python311-requirements-parser doxygen
+    sudo zypper install qemu libvirt opi QGnomePlatform-qt5 QGnomePlatform-qt6 firefox gnome-calendar gnome-sound-recorder gnome-tweaks gnome-extensions gnome-console loupe epiphany simple-scan gparted libreoffice xournalpp evince code git-lfs gcc gcc-c++ clang-tools rust cmake meson ninja java-17-openjdk blueprint-compiler gtk4-tools webp-pixbuf-loader steam fastfetch curl unzip git nano cabextract fontconfig gimp inkscape krita openssl ffmpeg aria2 yt-dlp yelp yelp-tools yelp-xsl cava intltool sqlitebrowser gnuplot chromaprint-fpcalc libchromaprint1 mm-common flatpak flatpak-builder dconf-editor fetchmsttfonts libxml2 adw-gtk3 adw-gtk3-dark gnome-backgrounds gnome-remote-desktop python311-requirements-parser doxygen gnome-firmware
     sudo zypper install java-17-openjdk-devel gtk4-devel libadwaita-devel glib2-devel libcurl-devel python311-devel openssl-devel gettext-devel libxml2-devel libsecret-devel libuuid-devel rapidcsv-devel
     sudo zypper install "libboost*"
     sudo zypper -n remove gnome-terminal nautilus-extension-terminal gnome-music eog evolution vinagre xterm file-roller git-gui lightsoff gnome-mines iagno quadrapassel swell-foop gnome-sudoku
@@ -34,7 +34,7 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     sudo flatpak update
-    sudo flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord
+    sudo flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music
     # Megasync
     wget https://mega.nz/linux/repo/openSUSE_Tumbleweed/x86_64/megasync-openSUSE_Tumbleweed.x86_64.rpm
     sudo zypper install "megasync-openSUSE_Tumbleweed.x86_64.rpm"
@@ -43,14 +43,14 @@ function install_apps() {
     read -p "Install keyd & remap Copilot key [y/N]: " KEYD
     if [ "$KEYD" == "y" ]; then
         sudo zypper install keyd
+        sudo mkdir -p /etc/keyd
+        sudo touch /etc/keyd/default.conf
+        echo "[ids]" | sudo tee -a /etc/keyd/default.conf
+        echo "*" | sudo tee -a /etc/keyd/default.conf
+        echo "[main]" | sudo tee -a /etc/keyd/default.conf
+        echo "f23+leftshift+leftmeta = overload(control, esc)" | sudo tee -a /etc/keyd/default.conf
         sudo systemctl enable keyd
         sudo systemctl start keyd
-        sudo touch /etc/keyd/default.conf
-        sudo echo "[ids]" >> /etc/keyd/default.conf
-        sudo echo "*" >> /etc/keyd/default.conf
-        sudo echo "[main]" >> /etc/keyd/default.conf
-        sudo echo "f23+leftshift+leftmeta = overload(control, esc)" >> /etc/keyd/default.conf
-        sudo keyd reload
     fi
     # Cleanup
     sudo zypper clean
