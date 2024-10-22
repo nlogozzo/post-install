@@ -1,4 +1,5 @@
 echo "==Installing Apps=="
+winget source refresh
 $firefox = Read-Host "Install Firefox? (y/n) "
 if ($firefox -eq 'y') {
     winget install --id=Mozilla.Firefox -e
@@ -14,22 +15,30 @@ winget install --id=Zoom.Zoom -e
 winget install --id=Discord.Discord -e
 winget install --id=Element.Element -e
 winget install WhatsApp -s msstore
-winget install --id 9P3JFPWWDZRC -s msstore
-winget install --id=JanDeDobbeleer.OhMyPosh -e
+winget install --id 9P3JFPWWDZRC -s msstore # WinUI 3 Gallery
+winget install --id=JanDeDobbeleer.OhMyPosh -e 
 winget install --id=mlocati.GetText -e
 winget install --id=Fastfetch-cli.Fastfetch -e
 winget install --id=DEVCOM.JetBrainsMonoNerdFont -e
-winget install --id 9WZDNCRDXF41 -s msstore
+winget install --id 9WZDNCRDXF41 -s msstore # Character Map UWP
 winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 winget install --id=DimitriVanHeesch.Doxygen -e
-$games = Read-Host "Install games? (y/n) "
+winget install --id=VideoLAN.VLC -e
+winget install --id=MusicBee.MusicBee -e
+winget install --id=Nickvision.Parabolic -e
+$games = Read-Host "Install Games? (y/n) "
 if ($games -eq 'y') {
     winget install --id=Valve.Steam -e
     winget install --id=EpicGames.EpicGamesLauncher -e
+    Start-Process https://aka.ms/DownloadNewLauncher?ref=launcher
 }
 $mega = Read-Host "Install megasync? (y/n) "
 if ($mega -eq 'y') {
     winget install --id=Mega.MEGASync -e
+}
+$hp = Read-Host "Install HP Smart? (y/n) "
+if ($hp -eq 'y') {
+    winget install --id 9WZDNCRFHWLH -s msstore # HP Smart
 }
 winget upgrade --all
 echo "==Setting Environment Variables=="
@@ -42,12 +51,10 @@ echo "==Configuring PowerShell=="
 New-Item -Path $PROFILE -Type File -Force
 echo "fastfetch" | Out-File -FilePath $PROFILE
 echo 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression' | Out-File -Append -FilePath $PROFILE
-echo "==Minecraft=="
-Start-Process https://aka.ms/DownloadNewLauncher?ref=launcher
 echo "==Serato=="
 Start-Process https://serato.com/dj/pro/downloads
 echo "==WSL=="
-$install_wsl = Read-Host "Do you want to install WSL? (y/n) "
+$install_wsl = Read-Host "Install WSL? (y/n) "
 if ($install_wsl -eq "y") {
     wsl --install --d Ubuntu
 }
