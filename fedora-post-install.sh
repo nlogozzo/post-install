@@ -29,7 +29,7 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     flatpak update
-    flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music
+    flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music dev.alextren.Spot
     # MEGA
     cd ~
     wget https://mega.nz/linux/repo/Fedora_41/x86_64/megasync-Fedora_41.x86_64.rpm -O megasync.rpm
@@ -195,13 +195,9 @@ function setup_zsh() {
     read -p "Setup ZSH [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
         sudo dnf install zsh -y
-        if command -v curl >/dev/null 2>&1; then
-            sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-        else
-            sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-        fi
-        # Configure
-        sed -i '/z4h install ohmyzsh\/ohmyzsh || return/a fastfetch' ~/.zshrc
+        chsh -s $(which zsh)
+        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        echo "fastfetch" >> ~/.zshrc
         echo 'alias system-update="sudo dnf upgrade; flatpak update"' >> ~/.zshrc
     fi
 }
