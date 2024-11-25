@@ -22,14 +22,14 @@ function install_apps() {
     echo "Installing from repositories..."
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
-    sudo dnf install gnome-tweaks gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware mscore-fonts-all -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware mscore-fonts-all libheif-tools -y --allowerasing
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel libidn-devel libxml2-devel mm-devel boost-devel -y --allowerasing
     # Flatpak
     echo "Installing from Flatpak..."
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     flatpak update
-    flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music dev.alextren.Spot
+    flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile org.gnome.seahorse.Application re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client
     # MEGA
     cd ~
     wget https://mega.nz/linux/repo/Fedora_41/x86_64/megasync-Fedora_41.x86_64.rpm -O megasync.rpm
@@ -194,10 +194,13 @@ function setup_zsh() {
     echo "===ZSH==="
     read -p "Setup ZSH [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        sudo dnf install zsh -y
+        sudo dnf install zsh zsh-syntax-highlighting -y
         chsh -s $(which zsh)
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        echo "fastfetch" >> ~/.zshrc
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+        sed -i "1ifastfetch" ~/.zshrc
         echo 'alias system-update="sudo dnf upgrade; flatpak update"' >> ~/.zshrc
     fi
 }
