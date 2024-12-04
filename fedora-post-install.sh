@@ -23,10 +23,11 @@ function install_apps() {
     echo "Installing from repositories..."
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
-    sudo dnf install gnome-tweaks gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware mscore-fonts-all libheif-tools virtio-win -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware mscore-fonts-all libheif-tools virtio-win dmg2img -y --allowerasing
     sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel libidn-devel libxml2-devel mm-devel boost-devel -y --allowerasing
     sudo dnf install fedora-repos-rawhide -y
     sudo dnf upgrade yt-dlp --enablerepo=rawhide
+    sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
     # Flatpak
     echo "Installing from Flatpak..."
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -67,6 +68,8 @@ function configure_user() {
     echo "Configuring user groups..."
     sudo usermod -a -G lp $USER
     sudo usermod -a -G libvirt $USER
+    sudo usermod -a -G kvm $USER
+    sudo usermod -a -G input $USER
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
@@ -202,8 +205,8 @@ function setup_zsh() {
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-	sed -i "1ifastfetch" ~/.zshrc
-	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+        sed -i "1ifastfetch" ~/.zshrc
+        echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
         echo 'alias system-update="sudo dnf upgrade; flatpak update"' >> ~/.zshrc
         echo "cd ~" >> ~/.zshrc
     fi
