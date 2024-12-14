@@ -8,12 +8,20 @@ function enable_repos() {
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
     sudo wget https://fedorapeople.org/groups/virt/virtio-win/virtio-win.repo -O /etc/yum.repos.d/virtio-win.repo
+    sudo dnf group upgrade core -y
 }
 
 function upgrade() {
     echo "===Upgrading System==="
     sleep 1
     sudo dnf upgrade -y
+    read -p "Upgrade Firmware [y/N]: " FIRMWARE
+    if [ "$FIRMWARE" == "y" ]; then
+        sudo fwupdmgr refresh --force
+        sudo fwupdmgr get-devices
+        sudo fwupdmgr get-updates
+        sudo fwupdmgr update
+    fi
 }
 
 function install_apps() {
@@ -23,8 +31,8 @@ function install_apps() {
     echo "Installing from repositories..."
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf group install --with-optional virtualization -y
-    sudo dnf install gnome-tweaks gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware mscore-fonts-all libheif-tools virtio-win dmg2img -y --allowerasing
-    sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel libidn-devel libxml2-devel mm-devel boost-devel -y --allowerasing
+    sudo dnf install gnome-tweaks gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice evince code steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware mscore-fonts-all libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse -y --allowerasing
+    sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel boost-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel -y --allowerasing
     sudo dnf install fedora-repos-rawhide -y
     sudo dnf upgrade yt-dlp --enablerepo=rawhide
     sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
@@ -111,15 +119,19 @@ function configure_user() {
 function configure_system() {
     echo "===Configuring System==="
     sleep 1
+    # UTC Time
+    echo "Configuring UTC time..."
+    sudo timedatectl set-local-rtc '0'
     # Configure hostname
     echo "Configuring hostname..."
     echo "Current hostname: $(hostname)"
     read -p "New hostname: " NEWHOST
     sudo hostnamectl set-hostname $NEWHOST
-    # Enable and start services
-    echo "Enabling and starting services..."
+    # Configure services
+    echo "Configuring services..."
     sudo systemctl enable libvirtd
     sudo systemctl start libvirtd
+    sudo systemctl disable NetworkManager-wait-online.service
     # Enable SSH Connection
     read -p "Enable SSH Connection [y/N]: " REMOTE
     if [ "$REMOTE" == "y" ]; then
@@ -208,7 +220,6 @@ function setup_zsh() {
         sed -i "1ifastfetch" ~/.zshrc
         echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
         echo 'alias system-update="sudo dnf upgrade; flatpak update"' >> ~/.zshrc
-        echo "cd ~" >> ~/.zshrc
     fi
 }
 
