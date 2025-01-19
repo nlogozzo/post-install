@@ -58,3 +58,12 @@ $install_wsl = Read-Host "Install WSL? (y/n) "
 if ($install_wsl -eq "y") {
     wsl --install --d Ubuntu
 }
+echo "==vcpkg=="
+$vcpkg = Read-Host "Install and Setup vcpkg? (y/n) "
+if ($vcpkg -eq 'y') {
+    cd %HOMEPATH%
+    git clone "https://github.com/microsoft/vcpkg"
+    cd vcpkg
+    Start-Process "bootstrap-vcpkg.bat"
+    .\vcpkg.exe install boost-date-time boost-json curl gettext-libintl gtest libnick maddy sqlcipher qtbase qtsvg qttools
+}
