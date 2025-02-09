@@ -195,6 +195,7 @@ function install_cpp_libraries() {
 	export PATH="${PWD}/depot_tools:${PATH}"
         git clone https://skia.googlesource.com/skia.git
         cd skia
+        git reset --hard de898cc7cdaed4aed52c263066d73cf51e2610e4
 	python3 tools/git-sync-deps
 	bin/gn gen out/Release --args="is_debug=false is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_freetype=true skia_use_harfbuzz=true skia_pdf_subset_harfbuzz=true skia_use_system_freetype2=false skia_use_system_harfbuzz=false"
 	ninja -C out/Release skia modules
