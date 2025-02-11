@@ -116,13 +116,41 @@ function configure_system() {
     sudo systemctl start libvirtd
     sudo systemctl disable NetworkManager-wait-online.service
     # Enable SSH Connection
-    read -p "Enable SSH Connection [y/N]: " REMOTE
-    if [ "$REMOTE" == "y" ]; then
+    read -p "Enable SSH Connection [y/N]: " SSH
+    if [ "$SSH" == "y" ]; then
         sudo systemctl enable sshd
         sudo systemctl start sshd
         sudo firewall-cmd --zone=public --add-service=ssh --permanent
     fi
+    read -p "Enable RDP Connection [y/N]: " RDP
+    if [ "$RDP" == "y" ]; then
+    	tee /tmp/grd.te << EOF > /dev/null
+	module grd 1.0;
+	require {
+    	    type system_dbusd_t;
+    	    type unconfined_service_t;
+    	    type xdm_t;
+    	    class tcp_socket { getattr getopt read setopt shutdown write };
+	}
+	allow system_dbusd_t unconfined_service_t:tcp_socket { read write };
+	allow xdm_t unconfined_service_t:tcp_socket { getattr getopt read setopt shutdown write };
+	EOF
+	checkmodule -M -m -o /tmp/grd.mod /tmp/grd.te
+	semodule_package -o /tmp/grd.pp -m /tmp/grd.mod
+	sudo semodule -i /tmp/grd.pp
+    	read -p "RDP Username: " RDP_USER
+    	read -p "RDP Password: " RDP_PASS
+        sudo dnf -y install gnome-remote-desktop freerdp
+        sudo -u gnome-remote-desktop winpr-makecert -silent -rdp -path ~gnome-remote-desktop rdp-tls
+        sudo grdctl --system rdp enable
+	sudo grdctl --system rdp set-credentials "${RDP_USER}" "${RDP_PASS}"
+	sudo grdctl --system rdp set-tls-key ~gnome-remote-desktop/rdp-tls.key
+	sudo grdctl --system rdp set-tls-cert ~gnome-remote-desktop/rdp-tls.crt
+	sudo systemctl --now enable gnome-remote-desktop.service
+	sudo firewall-cmd --permanent --add-service=rdp
+    fi
     sudo firewall-cmd --reload
+    
 }
 
 function install_gnome_extensions() {
