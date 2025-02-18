@@ -13,7 +13,7 @@ winget install --id=Microsoft.VisualStudio.2022.Community -e
 winget install --id=Git.Git -e
 winget install --id=Zoom.Zoom -e
 winget install --id=Discord.Discord -e
-winget install --id=Element.Element -e
+winget install --id=cinnyapp.cinny-desktop -e
 winget install WhatsApp -s msstore
 winget install --id 9P3JFPWWDZRC -s msstore # WinUI 3 Gallery
 winget install --id=JanDeDobbeleer.OhMyPosh -e 
@@ -24,7 +24,6 @@ winget install --id 9WZDNCRDXF41 -s msstore # Character Map UWP
 winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 winget install --id=DimitriVanHeesch.Doxygen -e
 winget install --id=VideoLAN.VLC -e
-winget install --id=MusicBee.MusicBee -e
 winget install --id=Nickvision.Parabolic -e
 $games = Read-Host "Install Games? (y/n) "
 if ($games -eq 'y') {
