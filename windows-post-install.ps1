@@ -43,8 +43,6 @@ if ($hp -eq 'y') {
 winget upgrade --all
 echo "==Setting Environment Variables=="
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-[System.Environment]::SetEnvironmentVariable("VCPKG_DEFAULT_TRIPLET","x64-windows", "User")
-[System.Environment]::SetEnvironmentVariable("VCPKG_ROOT","C:\Users\$env:UserName\vcpkg", "User")
 [System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\$env:UserName\OneDrive\Documents\Programming", "User")
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "BingSearchEnabled" -Value 0 -Type DWord
 echo "==Configuring PowerShell=="
@@ -56,14 +54,17 @@ Start-Process https://serato.com/dj/pro/downloads
 echo "==WSL=="
 $install_wsl = Read-Host "Install WSL? (y/n) "
 if ($install_wsl -eq "y") {
+    wsl --update
     wsl --install --d Ubuntu
 }
 echo "==vcpkg=="
 $vcpkg = Read-Host "Install and Setup vcpkg? (y/n) "
 if ($vcpkg -eq 'y') {
+    [System.Environment]::SetEnvironmentVariable("VCPKG_DEFAULT_TRIPLET","x64-windows", "User")
+    [System.Environment]::SetEnvironmentVariable("VCPKG_ROOT","C:\Users\$env:UserName\vcpkg", "User")
     cd %HOMEPATH%
     git clone "https://github.com/microsoft/vcpkg"
     cd vcpkg
     Start-Process "bootstrap-vcpkg.bat"
-    .\vcpkg.exe install boost-date-time boost-json curl gettext-libintl gtest libnick maddy sqlcipher qtbase qtsvg qttools
+    .\vcpkg.exe install boost-date-time boost-json curl gettext-libintl gflw3 gtest libnick maddy skia sqlcipher qtbase qtsvg qttools
 }
