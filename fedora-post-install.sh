@@ -225,24 +225,46 @@ function install_cpp_libraries() {
         # skia
         echo "Skia..."
         git clone 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'
-	export PATH="${PWD}/depot_tools:${PATH}"
+        export PATH="${PWD}/depot_tools:${PATH}"
         git clone https://skia.googlesource.com/skia.git
         cd skia
         git reset --hard de898cc7cdaed4aed52c263066d73cf51e2610e4
-	python3 tools/git-sync-deps
-	bin/gn gen out/Release --args="is_debug=false is_official_build=true is_component_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_freetype=true skia_use_harfbuzz=true skia_pdf_subset_harfbuzz=true skia_use_system_freetype2=false skia_use_system_harfbuzz=false"
-	ninja -C out/Release
-	sudo cp out/Release/*.a /usr/lib
-	sudo cp out/Release/*.so /usr/lib
-	sudo mkdir -p /usr/include/skia/include
-	sudo cp -r include/* /usr/include/skia/include
-	sudo mkdir -p /usr/include/skia/modules/
-	sudo cp -r modules/* /usr/include/skia/modules
-	cd ..
-	rm -rf depot_tools
-	rm -rf skia
-	# Update linker
-	sudo ldconfig
+        python3 tools/git-sync-deps
+        bin/gn gen out/Release --args="is_debug=false is_official_build=true is_component_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_freetype=true skia_use_harfbuzz=true skia_pdf_subset_harfbuzz=true skia_use_system_freetype2=false skia_use_system_harfbuzz=false"
+        ninja -C out/Release
+        sudo cp out/Release/*.a /usr/lib
+        sudo cp out/Release/*.so /usr/lib
+        sudo mkdir -p /usr/include/skia/include
+        sudo cp -r include/* /usr/include/skia/include
+        sudo mkdir -p /usr/include/skia/modules/
+        sudo cp -r modules/* /usr/include/skia/modules
+        cd ..
+        rm -rf depot_tools
+        rm -rf skia
+        # qlementine
+        echo "qlementine..."
+        git clone --depth 1 --branch "v1.0.2" https://github.com/oclero/qlementine
+        mkdir -p qlementine/build
+        cd qlementine/build
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DQLEMENTINE_SANDBOX="OFF" -DQLEMENTINE_SHOWCASE="OFF" -DCMAKE_INSTALL_PREFIX=/usr
+        cmake --build .
+        sudo cmake --install .
+        cd ..
+        cd ..
+        rm -rf qlementine
+        # qlementine-icons
+        echo "qlementine-icons..."
+        git clone --depth 1 --branch "install" https://github.com/nlogozzo/qlementine-icons
+        mkdir -p qlementine-icons/build
+        cd qlementine-icons/build
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DQLEMENTINE_ICONS_SANDBOX="OFF" -DCMAKE_INSTALL_PREFIX=/usr
+        cmake --build .
+        sudo cmake --install .
+        cd ..
+        cd ..
+        rm -rf qlementine-icons
+        # Update linker
+        sudo ldconfig
     fi
 }
 

@@ -35,12 +35,8 @@ rm -rf adw-gtk3
 # Restart WSL
 cd /mnt/c/ && cmd.exe /c start "Rebooting WSL" cmd /c "timeout 5 && title "Ubuntu" && wsl -d Ubuntu" && wsl.exe --terminate Ubuntu
 
-# Configure Flatpak
-sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-sudo flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-sudo flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier re.sonny.Workbench org.gnome.design.IconLibrary com.github.tchx84.Flatseal
-
 # Configure User
+cd ~
 xdg-user-dirs-update
 xdg-user-dirs-gtk-update
 sudo locale-gen en_US.UTF-8
@@ -51,6 +47,11 @@ git config --global http.postBuffer 524288000
 gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 ln -s /mnt/c/Users/nlogo ~/winhome
+
+# Configure Flatpak
+sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+sudo flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+sudo flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier re.sonny.Workbench org.gnome.design.IconLibrary com.github.tchx84.Flatseal
 
 # Configure bash
 echo "" >> ~/.bashrc
@@ -68,7 +69,7 @@ distrobox enter fedora
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
 sudo dnf upgrade -y
-sudo dnf install -y @development-tools @multimedia fastfetch wget nano curl yt-dlp ffmpeg aria2 git code gcc g++ gdb cmake meson blueprint-compiler gettext yelp-tools glib-devel gtk4-devel gtk4-devel-tools libadwaita-devel openssl-devel libcurl-devel json-devel gtest-devel gmock-devel gettext-devel libsecret-devel boost-devel java-latest-openjdk-devel gettext-devel glib2-devel libuuid-devel ibidn-devel libxml2-devel mm-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel
+sudo dnf install -y @development-tools @multimedia fastfetch wget nano curl yt-dlp ffmpeg aria2 git code gcc g++ gdb cmake meson blueprint-compiler gettext yelp-tools glib-devel gtk4-devel gtk4-devel-tools libadwaita-devel openssl-devel libcurl-devel json-devel gtest-devel gmock-devel gettext-devel libsecret-devel boost-devel java-latest-openjdk-devel gettext-devel glib2-devel libuuid-devel libidn-devel libxml2-devel mm-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel
 sudo dnf install -y "qt6-*"
 sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
 sudo chmod +x /usr/local/bin/oh-my-posh
@@ -82,13 +83,14 @@ distrobox stop fedora
 distrobox enter fedora
 
 # Install maddy
+cd ~
 git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
 sudo mkdir -p /usr/include/maddy
 sudo mv maddy/include/maddy/* /usr/include/maddy
-cd ..
-rm -rf maddy
+rm -rf ~/maddy
 
 # Install libxml++
+cd ~
 git clone --depth 1 --branch "5.4.0" https://github.com/libxmlplusplus/libxmlplusplus
 cd libxmlplusplus
 meson setup --prefix /usr --libdir lib64 --reconfigure -Dmaintainer-mode=false out-linux .
@@ -100,6 +102,7 @@ cd ..
 rm -rf libxmlplusplus
 
 # Install libnick
+cd ~
 git clone --depth 1 --branch "2025.1.0" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
@@ -111,6 +114,7 @@ cd ..
 rm -rf libnick
 
 # Install skia
+cd ~
 git clone 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'
 export PATH="${PWD}/depot_tools:${PATH}"
 git clone https://skia.googlesource.com/skia.git
@@ -128,6 +132,30 @@ sudo cp -r modules/* /usr/include/skia/modules
 cd ..
 rm -rf depot_tools
 rm -rf skia
+
+# Install qlementine
+cd ~
+git clone --depth 1 --branch "v1.0.2" https://github.com/oclero/qlementine
+mkdir -p qlementine/build
+cd qlementine/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DQLEMENTINE_SANDBOX="OFF" -DQLEMENTINE_SHOWCASE="OFF" -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+cd ..
+cd ..
+rm -rf qlementine
+
+# Install qlementine-icons
+cd ~
+git clone --depth 1 --branch "install" https://github.com/nlogozzo/qlementine-icons
+mkdir -p qlementine-icons/build
+cd qlementine-icons/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DQLEMENTINE_ICONS_SANDBOX="OFF" -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+cd ..
+cd ..
+rm -rf qlementine-icons
 
 # Update linker
 sudo ldconfig
