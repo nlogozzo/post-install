@@ -65,5 +65,5 @@ if ($vcpkg -eq 'y') {
     git clone "https://github.com/microsoft/vcpkg"
     cd vcpkg
     Start-Process "bootstrap-vcpkg.bat"
-    .\vcpkg.exe install boost-date-time boost-json curl gettext-libintl gflw3 gtest libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher qtbase qtsvg qttools
+    .\vcpkg.exe install boost-date-time boost-json boost-gil curl gettext-libintl glfw3 gtest libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher qtbase qtsvg qttools
 }
