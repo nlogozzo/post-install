@@ -46,7 +46,7 @@ function install_apps() {
     if [ "$QT6" == "y" ]; then
         sudo dnf install "qt6-*" qt-creator -y
         git clone https://github.com/Raincode/QtCreator-Color-Schemes
-	cd QtCreator-Color-Schemes
+	    cd QtCreator-Color-Schemes
         bash install_linux.bash
         cd ..
         rm -rf QtCreator-Color-Schemes
@@ -213,7 +213,7 @@ function install_cpp_libraries() {
         rm -rf libxmlplusplus
         # libnick
         echo "Libnick..."
-        git clone --depth 1 --branch "2025.1.0" https://github.com/NickvisionApps/libnick/
+        git clone --depth 1 --branch "2025.2.0" https://github.com/NickvisionApps/libnick/
         mkdir -p libnick/build
         cd libnick/build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr

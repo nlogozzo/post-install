@@ -1,3 +1,4 @@
+$ProgressPreference = 'SilentlyContinue'
 echo "==Installing Apps=="
 winget source refresh
 $firefox = Read-Host "Install Firefox? (y/n) "
@@ -54,7 +55,9 @@ echo "==WSL=="
 $install_wsl = Read-Host "Install WSL? (y/n) "
 if ($install_wsl -eq "y") {
     wsl --update
-    wsl --install --d Ubuntu
+    wsl --set-default-version 2
+    Invoke-WebRequest "https://github.com/WhitewaterFoundry/Fedora-Remix-for-WSL/releases/download/41.0.0/Fedora-Remix-for-WSL-SL_41.0.0.0_x64_arm64.msixbundle" -OutFile fedora.msixbundle
+    Add-AppxPackage .\fedora.msixbundle
 }
 echo "==vcpkg=="
 $vcpkg = Read-Host "Install and Setup vcpkg? (y/n) "

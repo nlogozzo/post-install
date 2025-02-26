@@ -103,7 +103,7 @@ rm -rf libxmlplusplus
 
 # Install libnick
 cd ~
-git clone --depth 1 --branch "2025.1.0" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2025.2.0" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
