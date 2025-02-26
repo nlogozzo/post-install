@@ -9,15 +9,15 @@ sudo dnf upgrade --refresh -y
 install-desktop.sh
 
 # Install apps
-sudo dnf install @development-tools @multimedia firefox gnome-extensions-app adw-gtk3-theme gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool gnuplot chromaprint-tools nodejs npm fop mm-common flatpak-builder dconf-editor dnsmasq nbd doxygen gnome-firmware libheif-tools dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck perl-Image-ExifTool clang-tools-extra -y --allowerasing
-sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel -y --allowerasing
+sudo dnf install @development-tools @multimedia firefox gnome-extensions-app adw-gtk3-theme jq gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool gnuplot chromaprint-tools nodejs npm fop mm-common flatpak-builder dconf-editor dnsmasq nbd doxygen gnome-firmware libheif-tools dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck perl-Image-ExifTool clang-tools-extra -y --allowerasing
+sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel glfw-devel -y --allowerasing
 sudo dnf remove -y gnome-system-monitor evince
 
 # Flatpak
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-flatpak update
-flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack app.drey.Biblioteca io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources org.gnome.Papers org.gnome.dspy
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+sudo flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+sudo flatpak update
+sudo flatpak install -y flathub org.gnome.Sdk//47 org.gnome.Platform//47 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack app.drey.Biblioteca io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources org.gnome.Papers org.gnome.dspy
 
 # Qt
 sudo dnf install "qt6-*" qt-creator -y
@@ -29,7 +29,7 @@ rm -rf QtCreator-Color-Schemes
 
 # Bash
 echo "fastfetch" >> ~/.bashrc
-echo 'alias system-update="sudo dnf upgrade --refresh; flatpak update"' >> ~/.bashrc
+echo 'alias system-update="sudo dnf upgrade --refresh; sudo flatpak update"' >> ~/.bashrc
 
 # GNOME Settings
 read -p "Set dark theme [y/N]: " DARK
@@ -87,7 +87,6 @@ echo "Maddy..."
 git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
 sudo mkdir -p /usr/include/maddy
 sudo mv maddy/include/maddy/* /usr/include/maddy
-cd ..
 rm -rf maddy
 # libxml++
 echo "Libxml++..."

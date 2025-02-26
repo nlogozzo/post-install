@@ -198,7 +198,6 @@ function install_cpp_libraries() {
         git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
         sudo mkdir -p /usr/include/maddy
         sudo mv maddy/include/maddy/* /usr/include/maddy
-        cd ..
         rm -rf maddy
         # libxml++
         echo "Libxml++..."
