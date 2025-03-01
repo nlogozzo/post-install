@@ -26,6 +26,7 @@ winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 winget install --id=DimitriVanHeesch.Doxygen -e
 winget install --id=VideoLAN.VLC -e
 winget install --id=Nickvision.Parabolic -e
+winget install --id=Microsoft.PowerToys -e
 $games = Read-Host "Install Games? (y/n) "
 if ($games -eq 'y') {
     winget install --id=Valve.Steam -e
@@ -41,6 +42,18 @@ if ($hp -eq 'y') {
     winget install --id 9WZDNCRFHWLH -s msstore # HP Smart
 }
 winget upgrade --all
+$qt = Read-Host "Install Qt Creator? (y/n) "
+if ($qt -eq 'y') {
+    winget install --id=Cppcheck.Cppcheck -e
+    Invoke-WebRequest "https://download.qt.io/official_releases/qtcreator/15.0/15.0.1/qt-creator-opensource-windows-x86_64-15.0.1.exe" -OutFile qtcreator.exe
+    Start-Process .\qtcreator.exe
+    Remove-Item .\qtcreator.exe
+    git clone https://github.com/Raincode/QtCreator-Color-Schemes
+    cd QtCreator-Color-Schemes
+    .\install_windows.bat
+    cd ..
+    Remove-Item "QtCreator-Color-Schemes" -Recurse -Force
+}
 echo "==Setting Environment Variables=="
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 [System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\$env:UserName\OneDrive\Documents\Programming", "User")
@@ -58,6 +71,7 @@ if ($install_wsl -eq "y") {
     wsl --set-default-version 2
     Invoke-WebRequest "https://github.com/WhitewaterFoundry/Fedora-Remix-for-WSL/releases/download/41.0.0/Fedora-Remix-for-WSL-SL_41.0.0.0_x64_arm64.msixbundle" -OutFile fedora.msixbundle
     Add-AppxPackage .\fedora.msixbundle
+    Remove-Item .\fedora.msixbundle
 }
 echo "==vcpkg=="
 $vcpkg = Read-Host "Install and Setup vcpkg? (y/n) "

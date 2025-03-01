@@ -3,6 +3,7 @@
 # Upgrade
 sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
 sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+update.sh
 sudo dnf upgrade --refresh -y
 
 # Install Desktop
@@ -29,7 +30,7 @@ rm -rf QtCreator-Color-Schemes
 
 # Bash
 echo "fastfetch" >> ~/.bashrc
-echo 'alias system-update="sudo dnf upgrade --refresh; sudo flatpak update"' >> ~/.bashrc
+echo 'alias system-update="sudo dnf upgrade --refresh; sudo flatpak update; update.sh"' >> ~/.bashrc
 
 # GNOME Settings
 read -p "Set dark theme [y/N]: " DARK
