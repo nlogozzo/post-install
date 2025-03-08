@@ -30,7 +30,7 @@ rm -rf QtCreator-Color-Schemes
 
 # Bash
 echo "fastfetch" >> ~/.bashrc
-echo 'alias system-update="sudo dnf upgrade --refresh; sudo flatpak update; update.sh"' >> ~/.bashrc
+echo 'alias system-update="sudo dnf upgrade --refresh --no-best; sudo flatpak update; sudo update.sh"' >> ~/.bashrc
 
 # GNOME Settings
 read -p "Set dark theme [y/N]: " DARK

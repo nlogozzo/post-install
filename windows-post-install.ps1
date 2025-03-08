@@ -26,7 +26,7 @@ winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 winget install --id=DimitriVanHeesch.Doxygen -e
 winget install --id=VideoLAN.VLC -e
 winget install --id=Nickvision.Parabolic -e
-winget install --id=Microsoft.PowerToys -e
+winget install --id=Cyanfish.NAPS2 -e
 $games = Read-Host "Install Games? (y/n) "
 if ($games -eq 'y') {
     winget install --id=Valve.Steam -e
@@ -53,6 +53,15 @@ if ($qt -eq 'y') {
     .\install_windows.bat
     cd ..
     Remove-Item "QtCreator-Color-Schemes" -Recurse -Force
+}
+$npp = Read-Home "Install Notepad++? (y/n) "
+if($npp -eq 'y') {
+    winget install --id Notepad++.Notepad++ -e
+    git clone "https://github.com/hellon8/VS2019-Dark-Npp"
+    cd VS2019-Dark-Npp
+    sudo install.bat
+    cd ..
+    Remove-Item "VS2019-Dark-Npp" -Recurse -Force
 }
 echo "==Setting Environment Variables=="
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
@@ -82,5 +91,5 @@ if ($vcpkg -eq 'y') {
     git clone "https://github.com/microsoft/vcpkg"
     cd vcpkg
     Start-Process "bootstrap-vcpkg.bat"
-    .\vcpkg.exe install boost-date-time boost-json boost-gil curl gettext-libintl glfw3 gtest libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher qtbase qtsvg qttools
+    .\vcpkg.exe install boost-date-time boost-json boost-gil curl gettext-libintl glfw3 gtest libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher qtbase qtsvg qttools qlementine qlementine-icons
 }
