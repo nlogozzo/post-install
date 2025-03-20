@@ -9,7 +9,6 @@ winget install --id=Microsoft.Office -e
 winget install --id=Foxit.FoxitReader -e
 winget install --id=JRSoftware.InnoSetup -e
 winget install --id=GitHub.GitHubDesktop -e
-winget install --id=Microsoft.VisualStudioCode -e
 winget install --id=Microsoft.VisualStudio.2022.Community -e
 winget install --id=Git.Git -e
 winget install --id=Zoom.Zoom -e
@@ -91,5 +90,5 @@ if ($vcpkg -eq 'y') {
     git clone "https://github.com/microsoft/vcpkg"
     cd vcpkg
     Start-Process "bootstrap-vcpkg.bat"
-    .\vcpkg.exe install boost-date-time boost-json boost-gil curl gettext-libintl glfw3 gtest libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher qtbase qtsvg qttools qlementine qlementine-icons
+    .\vcpkg.exe install boost-date-time boost-json boost-gil curl gettext-libintl glfw3 gtest libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher qtbase qtcharts qtsvg qttools qlementine qlementine-icons
 }
