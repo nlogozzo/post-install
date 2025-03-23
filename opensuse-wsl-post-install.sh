@@ -24,6 +24,7 @@ flatpak --user install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.n
 # User
 echo "fastfetch" >> ~/.bashrc
 echo "export GDK_BACKEND=x11" >> ~/.bashrc
+echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 ln -s /mnt/c/Users/nlogo ~/winhome
 
