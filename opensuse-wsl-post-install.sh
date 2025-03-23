@@ -9,8 +9,8 @@ sudo zypper install -t pattern wsl_gui
 wsl.exe --terminate openSUSE-Tumbleweed
 
 # Install
-sudo zypper install git nano gcc gcc-c++ gdb cmake meson ninja blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip openssl ffmpeg aria2 yt-dlp yelp-tools cava intltool gnuplot chromaprint flatpak xdg-user-dirs mm-common doxygen fop
-sudo zypper install libadwaita-devel gettext-devel glib2-devel gtest libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel boost* libboost* libimobiledevice-devel libglfw3
+sudo zypper install git nano gcc gcc-c++ gdb cmake meson ninja blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip openssl ffmpeg aria2 yt-dlp yelp-tools cava intltool gnuplot chromaprint flatpak xdg-user-dirs mm-common doxygen fop lipzip
+sudo zypper install libadwaita-devel gettext-devel glib2-devel gtest libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel boost* libboost* libimobiledevice-devel libglfw3 libzip-devel
 sudo zypper install qt6*
 xdg-user-dirs-update
 wsl.exe --terminate openSUSE-Tumbleweed
@@ -25,6 +25,7 @@ flatpak --user install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.n
 echo "fastfetch" >> ~/.bashrc
 echo "export GDK_BACKEND=x11" >> ~/.bashrc
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+ln -s /mnt/c/Users/nlogo ~/winhome
 
 # maddy
 git clone --depth 1 --branch "1.3.0" https://github.com/progsource/maddy
