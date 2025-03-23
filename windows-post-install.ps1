@@ -77,11 +77,10 @@ Start-Process https://serato.com/dj/pro/downloads
 echo "==WSL=="
 $install_wsl = Read-Host "Install WSL? (y/n) "
 if ($install_wsl -eq "y") {
-    wsl --update
-    wsl --set-default-version 2
-    Invoke-WebRequest "https://github.com/WhitewaterFoundry/Fedora-Remix-for-WSL/releases/download/41.0.0/Fedora-Remix-for-WSL-SL_41.0.0.0_x64_arm64.msixbundle" -OutFile fedora.msixbundle
-    Add-AppxPackage .\fedora.msixbundle
-    Remove-Item .\fedora.msixbundle
+	wsl --set-default-version 2
+	wsl --update --pre-release
+	wsl --install --no-distribution
+	wsl --install openSUSE-Tumbleweed
 }
 echo "==vcpkg=="
 $vcpkg = Read-Host "Install and Setup vcpkg? (y/n) "
