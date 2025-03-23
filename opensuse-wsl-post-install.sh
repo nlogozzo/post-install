@@ -3,13 +3,13 @@
 cd ~
 
 # Update
-sudo zypper update
+sudo zypper dup
 sudo zypper install -t pattern wsl_systemd
 sudo zypper install -t pattern wsl_gui
 wsl.exe --terminate openSUSE-Tumbleweed
 
 # Install
-sudo zypper install git nano gcc gcc-c++ gdb cmake meson ninja blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip openssl ffmpeg aria2 yt-dlp yelp-tools cava intltool gnuplot chromaprint flatpak xdg-user-dirs mm-common doxygen fop lipzip
+sudo zypper install git nano gcc gcc-c++ gdb cmake meson ninja blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip openssl ffmpeg aria2 yt-dlp yelp-tools yelp-xsl cava intltool gnuplot chromaprint flatpak xdg-user-dirs mm-common doxygen fop lipzip python3-lxml
 sudo zypper install libadwaita-devel gettext-devel glib2-devel gtest libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel boost* libboost* libimobiledevice-devel libglfw3 libzip-devel
 sudo zypper install qt6*
 xdg-user-dirs-update
@@ -25,6 +25,7 @@ flatpak --user install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.n
 echo "fastfetch" >> ~/.bashrc
 echo "export GDK_BACKEND=x11" >> ~/.bashrc
 echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
+echo "alias system-update='sudo zypper dup; flatpak --user update'" >> ~/.bashrc
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 ln -s /mnt/c/Users/nlogo ~/winhome
 
