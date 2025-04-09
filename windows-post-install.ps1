@@ -45,7 +45,7 @@ winget upgrade --all
 $qt = Read-Host "Install Qt Creator? (y/n) "
 if ($qt -eq 'y') {
     winget install --id=Cppcheck.Cppcheck -e
-    Invoke-WebRequest "https://download.qt.io/official_releases/qtcreator/15.0/15.0.1/qt-creator-opensource-windows-x86_64-15.0.1.exe" -OutFile qtcreator.exe
+    Invoke-WebRequest "https://download.qt.io/official_releases/qtcreator/16.0/16.0.0/qt-creator-opensource-windows-x86_64-16.0.0.exe" -OutFile qtcreator.exe
     Start-Process .\qtcreator.exe
     Remove-Item .\qtcreator.exe
     git clone https://github.com/Raincode/QtCreator-Color-Schemes
