@@ -1,4 +1,5 @@
 $ProgressPreference = 'SilentlyContinue'
+Start-Process powershell -ArgumentList "-Command & { sudo config --enable normal }" -Verb RunAs
 echo "==Installing Apps=="
 winget source refresh
 winget upgrade --all
