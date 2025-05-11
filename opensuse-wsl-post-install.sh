@@ -47,7 +47,7 @@ cd ..
 rm -rf libxmlplusplus
 
 # libnick
-git clone --depth 1 --branch "2025.3.6" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2025.5.2" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
