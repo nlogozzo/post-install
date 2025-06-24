@@ -24,6 +24,7 @@ function Install-Apps {
     winget install --id=EpicGames.EpicGamesLauncher -e
     winget install --id=Cppcheck.Cppcheck -e
     winget install --id Notepad++.Notepad++ -e
+    winget install --id Microsoft.PowerToys -e
     Invoke-WebRequest "https://download.qt.io/official_releases/qtcreator/17.0/17.0.0/qt-creator-opensource-windows-x86_64-17.0.0.exe" -OutFile qtcreator.exe
     Start-Process .\qtcreator.exe -Wait
     Remove-Item .\qtcreator.exe
