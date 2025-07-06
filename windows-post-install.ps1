@@ -77,7 +77,7 @@ function Install-Vcpkg {
     git clone "https://github.com/microsoft/vcpkg"
     cd vcpkg
     Start-Process "bootstrap-vcpkg.bat"
-    .\vcpkg.exe install boost-date-time boost-json boost-gil curl gettext-libintl glfw3 gtest libjpeg-turbo libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher qtbase qtsvg qttools qlementine qlementine-icons wintoast
+    .\vcpkg.exe install boost-date-time boost-json boost-gil cpr curl gettext-libintl glfw3 gtest libjpeg-turbo libnick maddy skia[core,fontconfig,freetype,gl,harfbuzz,icu,vulkan] sqlcipher
 }
 
 function Invoke-Main {
