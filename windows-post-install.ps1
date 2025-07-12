@@ -60,10 +60,11 @@ function Add-EnvironmentVariables {
 }
 
 function Add-PowerShellConfiguration {
-    New-Item -Path "$([Environment]::GetFolderPath("MyDocuments"))\PowerShell\Microsoft.PowerShell_profile.ps1" -Type File -Force
-    echo "clear" | Out-File -FilePath $PROFILE
-    echo "fastfetch" | Out-File -Append -FilePath $PROFILE
-    echo 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression' | Out-File -Append -FilePath $PROFILE
+    $profilePath = "$([Environment]::GetFolderPath("MyDocuments"))\PowerShell\Microsoft.PowerShell_profile.ps1"
+    New-Item -Path $profilePath -Type File -Force
+    echo "clear" | Out-File -FilePath $profilePath
+    echo "fastfetch" | Out-File -Append -FilePath $profilePath
+    echo 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression' | Out-File -Append -FilePath $profilePath
 }
 
 function Install-WSL {
