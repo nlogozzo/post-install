@@ -1,6 +1,7 @@
 function Install-Apps {
     winget source refresh
     winget upgrade --all
+    winget install --id=Microsoft.PowerShell -e
     winget install --id=Microsoft.Office -e
     winget install --id=Foxit.FoxitReader -e
     winget install --id=JRSoftware.InnoSetup -e
@@ -8,6 +9,7 @@ function Install-Apps {
     winget install --id=Microsoft.VisualStudio.2022.Community -e
     winget install --id=Git.Git -e
     winget install --id Python.Python.3.12 -e
+    winget install --id=OpenJS.NodeJS -e
     winget install --id=Zoom.Zoom -e
     winget install --id=Discord.Discord -e
     winget install --id=cinnyapp.cinny-desktop -e
@@ -58,8 +60,9 @@ function Add-EnvironmentVariables {
 }
 
 function Add-PowerShellConfiguration {
-    New-Item -Path $PROFILE -Type File -Force
-    echo "fastfetch" | Out-File -FilePath $PROFILE
+    New-Item -Path "$([Environment]::GetFolderPath("MyDocuments"))\PowerShell\Microsoft.PowerShell_profile.ps1" -Type File -Force
+    echo "clear" | Out-File -FilePath $PROFILE
+    echo "fastfetch" | Out-File -Append -FilePath $PROFILE
     echo 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression' | Out-File -Append -FilePath $PROFILE
 }
 
