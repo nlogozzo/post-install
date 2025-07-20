@@ -10,7 +10,7 @@ wsl.exe --terminate openSUSE-Tumbleweed
 
 # Install
 sudo zypper install git nano gcc gcc-c++ gdb cmake meson ninja blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip openssl ffmpeg aria2 yt-dlp yelp-tools yelp-xsl cava intltool gnuplot chromaprint flatpak xdg-user-dirs mm-common doxygen fop lipzip python3-lxml python3-requirements-parser python3-mutagen
-sudo zypper install libadwaita-devel gettext-devel glib2-devel gtest libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel boost* libboost* libimobiledevice-devel libglfw3 libzip-devel sqlcipher-devel
+sudo zypper install libadwaita-devel gettext-devel glib2-devel gtest libcurl-devel libopenssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel boost* libboost* libimobiledevice-devel libglfw3 libzip-devel sqlcipher-devel libunistring-devel
 sudo zypper install qt6*
 xdg-user-dirs-update
 wsl.exe --terminate openSUSE-Tumbleweed
@@ -36,6 +36,17 @@ sudo mkdir -p /usr/include/maddy
 sudo mv maddy/include/maddy/* /usr/include/maddy
 rm -rf maddy
 
+# cpr
+git clone --depth 1 --branch "1.12.0" https://github.com/libcpr/cpr/
+mkdir -p cpr/build
+cd cpr/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCPR_BUILD_TESTS=OFF -DCPR_ENABLE_SSL=ON -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+cd ..
+cd ..
+rm -rf cpr
+
 # libxml++
 git clone --depth 1 --branch "5.4.0" https://github.com/libxmlplusplus/libxmlplusplus
 cd libxmlplusplus
@@ -48,7 +59,7 @@ cd ..
 rm -rf libxmlplusplus
 
 # libnick
-git clone --depth 1 --branch "2025.6.5" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2025.7.3" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr

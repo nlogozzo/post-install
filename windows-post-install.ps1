@@ -7,6 +7,7 @@ function Install-Apps {
     winget install --id=JRSoftware.InnoSetup -e
     winget install --id=GitHub.GitHubDesktop -e
     winget install --id=Microsoft.VisualStudio.2022.Community -e
+    winget install --id=Microsoft.VisualStudioCode -e
     winget install --id=Git.Git -e
     winget install --id Python.Python.3.12 -e
     winget install --id=OpenJS.NodeJS -e
@@ -27,18 +28,7 @@ function Install-Apps {
     winget install --id=Cppcheck.Cppcheck -e
     winget install --id Notepad++.Notepad++ -e
     winget install --id Microsoft.PowerToys -e
-    Invoke-WebRequest "https://download.qt.io/official_releases/qtcreator/17.0/17.0.0/qt-creator-opensource-windows-x86_64-17.0.0.exe" -OutFile qtcreator.exe
-    Start-Process .\qtcreator.exe -Wait
-    Remove-Item .\qtcreator.exe
     Start-Process https://serato.com/dj/pro/downloads
-}
-
-function Install-QtCreatorThemes {
-    git clone https://github.com/Raincode/QtCreator-Color-Schemes
-    cd QtCreator-Color-Schemes
-    .\install_windows.bat
-    cd ..
-    Remove-Item "QtCreator-Color-Schemes" -Recurse -Force
 }
 
 function Install-NotepadThemes {
@@ -88,7 +78,6 @@ function Invoke-Main {
     $ProgressPreference = 'SilentlyContinue'
     Start-Process powershell -ArgumentList "-Command & { sudo config --enable normal }" -Verb RunAs
     Install-Apps
-    Install-QtCreatorThemes
     Install-NotepadThemes
     Install-PythonDependencies
     Add-EnvironmentVariables
