@@ -31,9 +31,14 @@ gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 ln -s /mnt/c/Users/nlogo ~/winhome
 
 # maddy
-git clone --depth 1 --branch "1.5.0" https://github.com/progsource/maddy
-sudo mkdir -p /usr/include/maddy
-sudo mv maddy/include/maddy/* /usr/include/maddy
+git clone --depth 1 --branch "1.6.0" https://github.com/progsource/maddy
+mkdir -p maddy/build
+cd maddy/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+cmake --build .
+sudo cmake --install .
+cd ..
+cd ..
 rm -rf maddy
 
 # cpr
@@ -59,7 +64,7 @@ cd ..
 rm -rf libxmlplusplus
 
 # libnick
-git clone --depth 1 --branch "2025.7.3" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2025.7.4" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
