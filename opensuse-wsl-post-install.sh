@@ -64,7 +64,7 @@ cd ..
 rm -rf libxmlplusplus
 
 # libnick
-git clone --depth 1 --branch "2025.7.4" https://github.com/NickvisionApps/libnick/
+git clone --depth 1 --branch "2025.7.6" https://github.com/NickvisionApps/libnick/
 mkdir -p libnick/build
 cd libnick/build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
@@ -74,32 +74,10 @@ cd ..
 cd ..
 rm -rf libnick
 
-# qlementine
-git clone --depth 1 --branch "v1.2.2" https://github.com/oclero/qlementine
-mkdir -p qlementine/build
-cd qlementine/build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DQLEMENTINE_SANDBOX="OFF" -DQLEMENTINE_SHOWCASE="OFF" -DCMAKE_INSTALL_PREFIX=/usr
-cmake --build .
-sudo cmake --install .
-cd ..
-cd ..
-rm -rf qlementine
-
-# qlementine-icons
-git clone --depth 1 --branch "v1.10.0" https://github.com/oclero/qlementine-icons
-mkdir -p qlementine-icons/build
-cd qlementine-icons/build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DQLEMENTINE_ICONS_SANDBOX="OFF" -DCMAKE_INSTALL_PREFIX=/usr
-cmake --build .
-sudo cmake --install .
-cd ..
-cd ..
-rm -rf qlementine-icons
-
 # skia
 git clone 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'
 export PATH="${PWD}/depot_tools:${PATH}"
-git clone --branch "chrome/m138" https://skia.googlesource.com/skia.git
+git clone --branch "chrome/m140" https://skia.googlesource.com/skia.git
 cd skia
 python3 tools/git-sync-deps
 bin/gn gen out/Release --args="is_debug=false is_official_build=true is_component_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_freetype=true skia_use_harfbuzz=true skia_pdf_subset_harfbuzz=true skia_use_system_freetype2=false skia_use_system_harfbuzz=false"
