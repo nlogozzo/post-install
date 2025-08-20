@@ -34,6 +34,11 @@ function install_apps() {
     wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm -O megasync.rpm
     sudo dnf install megasync.rpm -y
     rm megasync.rpm
+    # Italian
+    read -p "Install italian language pack [y/N]: " ITLANG
+    if [ "$ITLANG" == "y" ]; then
+        sudo dnf install langpacks-it glibc-langpack-it hunspell-it mythes-it hyphen-it aspell-it
+    fi
 }
 
 function configure_user() {
@@ -125,7 +130,8 @@ function install_gnome_extensions() {
             https://extensions.gnome.org/extension/5500/auto-activities/
             https://extensions.gnome.org/extension/6096/smile-complementary-extension/
             https://extensions.gnome.org/extension/5410/grand-theft-focus/
-            https://extensions.gnome.org/extension/7048/rounded-window-corners-reborn/)
+            https://extensions.gnome.org/extension/7048/rounded-window-corners-reborn/
+            https://extensions.gnome.org/extension/1488/gnome-fuzzy-search/)
         for i in "${array[@]}"; do
             EXTENSION_ID=$(curl -s $i | grep -oP 'data-uuid="\K[^"]+')
             VERSION_TAG=$(curl -Lfs "https://extensions.gnome.org/extension-query/?search=$EXTENSION_ID" | jq '.extensions[0] | .shell_version_map | map(.pk) | max')
