@@ -20,8 +20,8 @@ function install_apps() {
     sleep 1
     # Repos
     echo "Installing from repositories..."
-    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra -y --allowerasing
-    sudo dnf install java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel -y --allowerasing
+    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core -y --allowerasing
+    sudo dnf install kernel-devel java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel -y --allowerasing
     sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
     sudo dnf remove -y gnome-system-monitor evince
     # Flatpak
@@ -29,7 +29,9 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     flatpak update
-    flatpak install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers dev.qwery.AddWater org.gnome.dspy
+    flatpak install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers org.gnome.dspy
+    # Pip
+    pip3 install --upgrade gnome-extensions-cli
     # MEGA
     wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm -O megasync.rpm
     sudo dnf install megasync.rpm -y
@@ -89,7 +91,7 @@ function configure_user() {
     gsettings set org.gnome.desktop.session idle-delay 900
     # Firefox theme
     firefox
-    flatpak run dev.qwery.AddWater
+    echo "firefox:in:curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash" | sudo tee /etc/dnf/plugins/post-transaction-actions.d/firefox.action
 }
 
 function configure_system() {
@@ -122,32 +124,28 @@ function install_gnome_extensions() {
     echo "===GNOME Extensions==="
     read -p "Install GNOME extensions [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        array=(https://extensions.gnome.org/extension/4269/alphabetical-app-grid/
-            https://extensions.gnome.org/extension/615/appindicator-support/
-            https://extensions.gnome.org/extension/4362/fullscreen-avoider/
-            https://extensions.gnome.org/extension/5506/user-avatar-in-quick-settings/
-            https://extensions.gnome.org/extension/1108/add-username-to-top-panel/
-            https://extensions.gnome.org/extension/5500/auto-activities/
-            https://extensions.gnome.org/extension/6096/smile-complementary-extension/
-            https://extensions.gnome.org/extension/5410/grand-theft-focus/
-            https://extensions.gnome.org/extension/7048/rounded-window-corners-reborn/
-            https://extensions.gnome.org/extension/1488/gnome-fuzzy-search/)
-        for i in "${array[@]}"; do
-            EXTENSION_ID=$(curl -s $i | grep -oP 'data-uuid="\K[^"]+')
-            VERSION_TAG=$(curl -Lfs "https://extensions.gnome.org/extension-query/?search=$EXTENSION_ID" | jq '.extensions[0] | .shell_version_map | map(.pk) | max')
-            wget -O ${EXTENSION_ID}.zip "https://extensions.gnome.org/download-extension/${EXTENSION_ID}.shell-extension.zip?version_tag=$VERSION_TAG"
-            gnome-extensions install --force ${EXTENSION_ID}.zip
-            if ! gnome-extensions list | grep --quiet ${EXTENSION_ID}; then
-                busctl --user call org.gnome.Shell.Extensions /org/gnome/Shell/Extensions org.gnome.Shell.Extensions InstallRemoteExtension s ${EXTENSION_ID}
-            fi
-            gnome-extensions enable ${EXTENSION_ID}
-            rm ${EXTENSION_ID}.zip
-        done
+        gnome-extensions-cli install 4269 615 4362 5506 1108 5500 6096 5410 7048 4684 3193 1488
         read -p "Disable extension version validation [y/N]: " VALIDATION
         if [ "$VALIDATION" == "y" ]; then
             gsettings set org.gnome.shell disable-extension-version-validation true
         fi
     fi
+}
+
+function install_asus_rog_support() {
+    echo "===Asus Rog Support==="
+    read -p "Install asus rog support [y/N]: " ASUS
+    if [ "$ASUS" == "y" ]; then
+        sudo dnf copr enable lukenukem/asus-linux
+        sudo dnf update --refresh -y
+        sudo dnf install asusctl supergfxctl asusctl-rog-gui akmod-nvidia xorg-x11-drv-nvidia-cuda -y
+        sleep 3m
+        sudo systemctl enable supergfxd.service
+        sudo systemctl enable nvidia-hibernate.service nvidia-suspend.service nvidia-resume.service nvidia-powerd.service
+        gnome-extensions-cli install 7018
+    fi
+    echo "https://asus-linux.org/guides/fedora-guide/"
+    sudo gnome-text-editor /etc/default/grub
 }
 
 function install_cpp_libraries() {
@@ -234,6 +232,7 @@ if [ "$CONTINUE" == "y" ]; then
     configure_user
     configure_system
     install_gnome_extensions
+    install_asus_rog_support
     install_cpp_libraries
     display_links
     echo "===Reboot==="
