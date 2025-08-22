@@ -3,8 +3,8 @@
 function enable_repos() {
     echo "===Enabling Repositories==="
     sleep 1
-    sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
-    sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+    sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
+    sudo dnf install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
     sudo wget https://fedorapeople.org/groups/virt/virtio-win/virtio-win.repo -O /etc/yum.repos.d/virtio-win.repo
     sudo dnf group upgrade core -y
 }
@@ -39,7 +39,7 @@ function install_apps() {
     # Italian
     read -p "Install italian language pack [y/N]: " ITLANG
     if [ "$ITLANG" == "y" ]; then
-        sudo dnf install langpacks-it glibc-langpack-it hunspell-it mythes-it hyphen-it aspell-it
+        sudo dnf install langpacks-it glibc-langpack-it hunspell-it mythes-it hyphen-it aspell-it -y
     fi
 }
 
@@ -59,12 +59,6 @@ function configure_user() {
     echo "Configuring bash..."
     echo "fastfetch" >> ~/.bashrc
     echo 'alias system-update="sudo dnf upgrade --refresh; flatpak update"' >> ~/.bashrc
-    # Install nerd font
-    curl -o ~/JetbrainsNerd.zip -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
-    unzip ~/JetbrainsNerd.zip -d ~/.local/share/fonts/
-    fc-cache -vf ~/.local/share/fonts/
-    rm ~/JetbrainsNerd.zip
-    gsettings set org.gnome.desktop.interface monospace-font-name "JetBrainsMono Nerd Font 10"
     # Configure GNOME settings
     echo "Configuring GNOME settings..."
     read -p "Set dark theme [y/N]: " DARK
