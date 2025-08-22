@@ -1,18 +1,21 @@
 #!/bin/bash
 
+function upgrade() {
+    echo "===Upgrading System==="
+    sleep 1
+    sudo dnf upgrade --refresh -y
+}
+
 function enable_repos() {
     echo "===Enabling Repositories==="
     sleep 1
     sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
     sudo dnf install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
     sudo wget https://fedorapeople.org/groups/virt/virtio-win/virtio-win.repo -O /etc/yum.repos.d/virtio-win.repo
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+    sudo dnf update
     sudo dnf group upgrade core -y
-}
-
-function upgrade() {
-    echo "===Upgrading System==="
-    sleep 1
-    sudo dnf upgrade --refresh -y
 }
 
 function install_apps() {
@@ -20,7 +23,7 @@ function install_apps() {
     sleep 1
     # Repos
     echo "Installing from repositories..."
-    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil -y --allowerasing
+    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil code -y --allowerasing
     sudo dnf install kernel-devel java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel sqlcipher-devel -y --allowerasing
     sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
     sudo dnf remove -y gnome-system-monitor evince
@@ -29,7 +32,7 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     flatpak update
-    flatpak install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers org.gnome.dspy
+    flatpak install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers org.gnome.dspy com.getpostman.Postman
     # Pip
     pip3 install --upgrade gnome-extensions-cli
     # MEGA
@@ -85,6 +88,7 @@ function configure_user() {
     gsettings set org.gnome.desktop.session idle-delay 900
     # Firefox theme
     firefox
+    curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
     echo "firefox:in:curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash" | sudo tee /etc/dnf/plugins/post-transaction-actions.d/firefox.action
 }
 
@@ -112,13 +116,19 @@ function configure_system() {
         sudo firewall-cmd --zone=public --add-service=ssh --permanent
     fi
     sudo firewall-cmd --reload
+    # Configure SecureBoot
+    read -p "Configure SecureBoot [y/N]: " SECURE
+    if [ "$SECURE" == "y" ]; then
+    	sudo kmodgenca -a
+    	sudo mokutil --import /etc/pki/akmods/certs/public_key.der
+    fi
 }
 
 function install_gnome_extensions() {
     echo "===GNOME Extensions==="
     read -p "Install GNOME extensions [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        gnome-extensions-cli install 4269 615 4362 5506 1108 5500 6096 5410 7048 4684 3193 3956
+        gnome-extensions-cli install 4269 615 4362 5500 6096 5410 7048 3956
         read -p "Disable extension version validation [y/N]: " VALIDATION
         if [ "$VALIDATION" == "y" ]; then
             gsettings set org.gnome.shell disable-extension-version-validation true
@@ -206,8 +216,8 @@ echo "prompts multiple times."
 echo
 read -p "Continue [y/N]: " CONTINUE
 if [ "$CONTINUE" == "y" ]; then
-    enable_repos
     upgrade
+    enable_repos
     install_apps
     configure_user
     configure_system
