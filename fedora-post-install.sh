@@ -20,8 +20,8 @@ function install_apps() {
     sleep 1
     # Repos
     echo "Installing from repositories..."
-    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core -y --allowerasing
-    sudo dnf install kernel-devel java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel -y --allowerasing
+    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil -y --allowerasing
+    sudo dnf install kernel-devel java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel sqlcipher-devel -y --allowerasing
     sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
     sudo dnf remove -y gnome-system-monitor evince
     # Flatpak
@@ -124,28 +124,12 @@ function install_gnome_extensions() {
     echo "===GNOME Extensions==="
     read -p "Install GNOME extensions [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        gnome-extensions-cli install 4269 615 4362 5506 1108 5500 6096 5410 7048 4684 3193 1488
+        gnome-extensions-cli install 4269 615 4362 5506 1108 5500 6096 5410 7048 4684 3193 3956
         read -p "Disable extension version validation [y/N]: " VALIDATION
         if [ "$VALIDATION" == "y" ]; then
             gsettings set org.gnome.shell disable-extension-version-validation true
         fi
     fi
-}
-
-function install_asus_rog_support() {
-    echo "===Asus Rog Support==="
-    read -p "Install asus rog support [y/N]: " ASUS
-    if [ "$ASUS" == "y" ]; then
-        sudo dnf copr enable lukenukem/asus-linux
-        sudo dnf update --refresh -y
-        sudo dnf install asusctl supergfxctl asusctl-rog-gui akmod-nvidia xorg-x11-drv-nvidia-cuda -y
-        sleep 3m
-        sudo systemctl enable supergfxd.service
-        sudo systemctl enable nvidia-hibernate.service nvidia-suspend.service nvidia-resume.service nvidia-powerd.service
-        gnome-extensions-cli install 7018
-    fi
-    echo "https://asus-linux.org/guides/fedora-guide/"
-    sudo gnome-text-editor /etc/default/grub
 }
 
 function install_cpp_libraries() {
@@ -189,11 +173,11 @@ function install_cpp_libraries() {
         echo "Skia..."
         git clone 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'
         export PATH="${PWD}/depot_tools:${PATH}"
-        git clone --branch "chrome/m140" https://skia.googlesource.com/skia.git
+        git clone --branch "chrome/m140" https://skia.googlesource.com/skia.git --depth 1
         cd skia
         python3 tools/git-sync-deps
         bin/gn gen out/Release --args="is_debug=false is_official_build=true is_component_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_freetype=true skia_use_harfbuzz=true skia_pdf_subset_harfbuzz=true skia_use_system_freetype2=false skia_use_system_harfbuzz=false"
-		ninja -C out/Release
+	ninja -C out/Release
         sudo cp out/Release/*.a /usr/lib
         sudo cp out/Release/*.so /usr/lib
         sudo mkdir -p /usr/include/skia/include
@@ -213,6 +197,8 @@ function display_links() {
     echo "https://community.linuxmint.com/tutorial/view/1609"
     echo "===Windows 11 KVM Instructions==="
     echo "https://sysguides.com/install-a-windows-11-virtual-machine-on-kvm"
+    echo "===ASUS Rog Support==="
+    echo "https://asus-linux.org/guides/fedora-guide/"
 }
 
 echo "===Fedora Post Install Script==="
