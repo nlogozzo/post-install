@@ -14,7 +14,8 @@ function enable_repos() {
     sudo wget https://fedorapeople.org/groups/virt/virtio-win/virtio-win.repo -O /etc/yum.repos.d/virtio-win.repo
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-    sudo dnf update
+    sudo dnf config-manager addrepo --from-repofile="https://download.docker.com/linux/fedora/docker-ce.repo"
+    sudo dnf update --refresh -y
     sudo dnf group upgrade core -y
 }
 
@@ -23,7 +24,7 @@ function install_apps() {
     sleep 1
     # Repos
     echo "Installing from repositories..."
-    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil code -y --allowerasing
+    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil code jetbrains-mono-fonts docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y --allowerasing
     sudo dnf install kernel-devel java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel sqlcipher-devel -y --allowerasing
     sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
     sudo dnf remove -y gnome-system-monitor evince
@@ -51,10 +52,13 @@ function configure_user() {
     sleep 1
     # Add user to groups
     echo "Configuring user groups..."
-    sudo usermod -a -G lp $USER
-    sudo usermod -a -G libvirt $USER
-    sudo usermod -a -G kvm $USER
-    sudo usermod -a -G input $USER
+    sudo groupadd docker
+    sudo usermod -aG lp $USER
+    sudo usermod -aG libvirt $USER
+    sudo usermod -aG kvm $USER
+    sudo usermod -aG input $USER
+    sudo usermod -aG docker $USER
+    exec su -l $USER
     # Configure git
     echo "Configuring git..."
     git config --global protocol.file.allow always
@@ -105,8 +109,8 @@ function configure_system() {
     sudo hostnamectl set-hostname $NEWHOST
     # Configure services
     echo "Configuring services..."
-    sudo systemctl enable libvirtd
-    sudo systemctl start libvirtd
+    sudo systemctl enable --now libvirtd
+    sudo systemctl enable --now docker
     sudo systemctl disable NetworkManager-wait-online.service
     # Enable SSH Connection
     read -p "Enable SSH Connection [y/N]: " SSH
