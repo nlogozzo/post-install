@@ -56,6 +56,7 @@ function configure_user() {
     sudo usermod -aG lp $USER
     sudo usermod -aG libvirt $USER
     sudo usermod -aG kvm $USER
+    sudo usermod -aG libvirt-qemu $USER
     sudo usermod -aG input $USER
     sudo usermod -aG docker $USER
     exec su -l $USER
@@ -132,7 +133,7 @@ function install_gnome_extensions() {
     echo "===GNOME Extensions==="
     read -p "Install GNOME extensions [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        gnome-extensions-cli install 4269 615 4362 5500 6096 5410 7048 3956
+        gnome-extensions-cli install 4269 615 4362 5500 6096 5410 7048 3956 3193 7904 2236
         read -p "Disable extension version validation [y/N]: " VALIDATION
         if [ "$VALIDATION" == "y" ]; then
             gsettings set org.gnome.shell disable-extension-version-validation true
@@ -168,7 +169,7 @@ function install_cpp_libraries() {
         rm -rf libxmlplusplus
         # libnick
         echo "Libnick..."
-        git clone --depth 1 --branch "2025.7.6" https://github.com/NickvisionApps/libnick/
+        git clone --depth 1 --branch "2025.9.1" https://github.com/NickvisionApps/libnick/
         mkdir -p libnick/build
         cd libnick/build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
