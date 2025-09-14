@@ -33,7 +33,7 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     flatpak update
-    flatpak install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors io.github.shiftey.Desktop com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers org.gnome.dspy com.getpostman.Postman
+    flatpak install -y flathub org.gnome.Sdk//48 org.gnome.Platform//48 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers org.gnome.dspy com.getpostman.Postman io.github.shiftey.Desktop
     # Pip
     pip3 install --upgrade gnome-extensions-cli
     # MEGA
@@ -133,7 +133,7 @@ function install_gnome_extensions() {
     echo "===GNOME Extensions==="
     read -p "Install GNOME extensions [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        gnome-extensions-cli install 4269 615 4362 5500 6096 5410 7048 3956 3193 7904 2236
+        gnome-extensions-cli install 4269 615 4362 5500 6096 5410 7048 3956 3193 7904 2236 6784
         read -p "Disable extension version validation [y/N]: " VALIDATION
         if [ "$VALIDATION" == "y" ]; then
             gsettings set org.gnome.shell disable-extension-version-validation true
@@ -169,7 +169,7 @@ function install_cpp_libraries() {
         rm -rf libxmlplusplus
         # libnick
         echo "Libnick..."
-        git clone --depth 1 --branch "2025.9.1" https://github.com/NickvisionApps/libnick/
+        git clone --depth 1 --branch "2025.9.2" https://github.com/NickvisionApps/libnick/
         mkdir -p libnick/build
         cd libnick/build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
