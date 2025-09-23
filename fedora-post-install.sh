@@ -13,7 +13,6 @@ function enable_repos() {
     sudo dnf install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
     sudo wget https://fedorapeople.org/groups/virt/virtio-win/virtio-win.repo -O /etc/yum.repos.d/virtio-win.repo
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
     sudo dnf config-manager addrepo --from-repofile="https://download.docker.com/linux/fedora/docker-ce.repo"
     sudo dnf update --refresh -y
     sudo dnf group upgrade core -y
@@ -24,7 +23,7 @@ function install_apps() {
     sleep 1
     # Repos
     echo "Installing from repositories..."
-    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil code jetbrains-mono-fonts docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y --allowerasing
+    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil jetbrains-mono-fonts docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin qtcreator -y --allowerasing
     sudo dnf install kernel-devel java-latest-openjdk-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel sqlcipher-devel -y --allowerasing
     sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
     sudo dnf remove -y gnome-system-monitor evince
@@ -91,6 +90,12 @@ function configure_user() {
     gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
     gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
     gsettings set org.gnome.desktop.session idle-delay 900
+    # Qt Creator Themes
+    git clone https://github.com/Raincode/QtCreator-Color-Schemes
+    cd QtCreator-Color-Schemes
+    bash install_linux.bash
+    cd ..
+    rm -rf QtCreator-Color-Schemes
     # Firefox theme
     firefox
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
@@ -133,7 +138,7 @@ function install_gnome_extensions() {
     echo "===GNOME Extensions==="
     read -p "Install GNOME extensions [y/N]: " INSTALL
     if [ "$INSTALL" == "y" ]; then
-        gnome-extensions-cli install 4269 615 4362 5500 6096 5410 7048 3956 3193 7904 2236 6784
+        gnome-extensions-cli install 4269 615 4362 5500 6096 5410 7048 3956 7904 6784
         read -p "Disable extension version validation [y/N]: " VALIDATION
         if [ "$VALIDATION" == "y" ]; then
             gsettings set org.gnome.shell disable-extension-version-validation true
@@ -169,7 +174,7 @@ function install_cpp_libraries() {
         rm -rf libxmlplusplus
         # libnick
         echo "Libnick..."
-        git clone --depth 1 --branch "2025.9.2" https://github.com/NickvisionApps/libnick/
+        git clone --depth 1 --branch "2025.9.4" https://github.com/NickvisionApps/libnick/
         mkdir -p libnick/build
         cd libnick/build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX=/usr
