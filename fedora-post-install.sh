@@ -22,7 +22,7 @@ function install_apps() {
     sleep 1
     # Repos
     echo "Installing from repositories..."
-    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil jetbrains-mono-fonts qtcreator -y --allowerasing
+    sudo dnf install @development-tools @multimedia @virtualization gnome-extensions-app simple-scan gparted adw-gtk3-theme libreoffice steam mixxx xournalpp gcc gcc-c++ gdb cmake meson ninja-build blueprint-compiler libadwaita webp-pixbuf-loader fastfetch curl wget unzip cabextract xorg-x11-font-utils fontconfig openssl ffmpeg aria2 yt-dlp yt-dlp+default libunity yelp-tools cava intltool sqlitebrowser gnuplot chromaprint-tools nodejs npm fop mm-common hunspell-it langpacks-it flatpak-builder dconf-editor libvirt qemu dnsmasq nbd doxygen gnome-firmware libheif-tools virtio-win dmg2img python3-pip python3-requirements-parser libimobiledevice-utils ifuse cppcheck vlc dialog freerdp iproute libnotify nmap-ncat gimp krita inkscape perl-Image-ExifTool clang-tools-extra dnf-plugins-core kmodtool akmods mokutil jetbrains-mono-fonts valgrind -y --allowerasing
     sudo dnf install kernel-devel libadwaita-devel gtk4-devel-tools gtk4-devel gettext-devel glib2-devel gtest-devel json-devel libcurl-devel openssl-devel libsecret-devel libuuid-devel libidn-devel libxml2-devel mm-devel boost-devel libimobiledevice-devel mesa-libGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-libOSMesa-devel glfw-devel libunistring-devel cpr-devel sqlcipher-devel -y --allowerasing
     sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
     sudo dnf remove -y gnome-system-monitor evince
@@ -31,9 +31,14 @@ function install_apps() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
     flatpak update
-    flatpak install -y flathub org.gnome.Sdk//49 org.gnome.Platform//49 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers org.gnome.dspy com.getpostman.Postman io.github.shiftey.Desktop
+    flatpak install -y flathub org.gnome.Sdk//49 org.gnome.Platform//49 org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark org.nickvision.tagger org.nickvision.tubeconverter org.nickvision.money org.nickvision.cavalier io.github.realmazharhussain.GdmSettings org.gnome.design.IconLibrary com.github.tchx84.Flatseal it.mijorus.smile app.drey.KeyRack re.sonny.Workbench app.drey.Biblioteca io.gitlab.adhami3310.Impression org.gnome.Fractal com.mojang.Minecraft io.mrarm.mcpelauncher org.onlyoffice.desktopeditors com.discordapp.Discord org.gnome.NetworkDisplays com.github.neithern.g4music com.spotify.Client us.zoom.Zoom io.github.flattool.Ignition page.tesk.Refine net.nokyan.Resources page.kramo.Cartridges org.gnome.Papers org.gnome.dspy com.getpostman.Postman io.github.shiftey.Desktop org.gnome.Mahjongg org.gnome.Builder
     # Pip
     pip3 install --upgrade gnome-extensions-cli
+    # Deno
+    wget https://github.com/denoland/deno/releases/download/v2.5.2/deno-x86_64-unknown-linux-gnu.zip
+    unzip deno-x86_64-unknown-linux-gnu.zip
+    sudo mv deno /usr/bin/deno
+    rm deno-x86_64-unknown-linux-gnu.zip
     # MEGA
     wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm -O megasync.rpm
     sudo dnf install megasync.rpm -y
@@ -87,12 +92,6 @@ function configure_user() {
     gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
     gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
     gsettings set org.gnome.desktop.session idle-delay 900
-    # Qt Creator Themes
-    git clone https://github.com/Raincode/QtCreator-Color-Schemes
-    cd QtCreator-Color-Schemes
-    bash install_linux.bash
-    cd ..
-    rm -rf QtCreator-Color-Schemes
     # Firefox theme
     firefox
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
