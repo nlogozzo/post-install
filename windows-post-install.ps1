@@ -27,6 +27,8 @@ function Install-Apps {
 		sudo winget install --id=mlocati.GetText -e
 		sudo winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 		sudo winget install --id=DimitriVanHeesch.Doxygen -e
+		sudo winget install --id=OpenJS.NodeJS- -e
+		sudo winget install --id=Postman.Postman  -e
 		$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 		python -m pip install --upgrade pip
 		pip install requirements-parser
