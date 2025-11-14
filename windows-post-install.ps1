@@ -3,7 +3,7 @@ function Install-Apps {
     sudo winget upgrade --all
     sudo winget install --id=Microsoft.PowerShell -e
     sudo winget install --id=Microsoft.Office -e
-    sudo winget install --id=Foxit.FoxitReader -e
+    sudo winget install --id SumatraPDF.SumatraPDF -e
     sudo winget install --id Notepad++.Notepad++ -e
     sudo winget install --id=Zoom.Zoom -e
     sudo winget install --id=Discord.Discord -e
