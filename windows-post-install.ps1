@@ -29,9 +29,11 @@ function Install-Apps {
 		sudo winget install --id=DimitriVanHeesch.Doxygen -e
 		sudo winget install --id=OpenJS.NodeJS- -e
 		sudo winget install --id=Postman.Postman  -e
+		sudo winget install --id=MSYS2.MSYS2 -e
 		$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 		python -m pip install --upgrade pip
 		pip install requirements-parser
+		pacman -Syuu
     }
     $games = Read-Host -Prompt "Install games? (y/n) "
     if($games -eq "y" -or $games -eq "Y") { 
