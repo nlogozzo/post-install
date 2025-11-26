@@ -7,7 +7,7 @@ function Install-Apps {
     sudo winget install --id Notepad++.Notepad++ -e
     sudo winget install --id=Zoom.Zoom -e
     sudo winget install --id=Discord.Discord -e
-    sudo winget install --id=cinnyapp.cinny-desktop -e
+    sudo winget install --id=cElement.Element -e
     sudo winget install --id=JanDeDobbeleer.OhMyPosh -e 
     sudo winget install --id=Fastfetch-cli.Fastfetch -e
     sudo winget install --id=DEVCOM.JetBrainsMonoNerdFont -e
@@ -16,19 +16,19 @@ function Install-Apps {
     sudo winget install --id=Cyanfish.NAPS2 -e
     sudo winget install --id Microsoft.PowerToys -e
     sudo winget install --id=Git.Git -e
-	$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
     $dev = Read-Host -Prompt "Install development tools? (y/n) "
     if($dev -eq "y" -or $dev -eq "Y") { 
 		sudo winget install --id=JRSoftware.InnoSetup -e
 		sudo winget install --id=GitHub.GitHubDesktop -e
-		sudo winget install --id=Microsoft.VisualStudio.2022.Community -e
+		sudo winget install --id=Microsoft.VisualStudio.Community -e
 		sudo winget install --id=Microsoft.VisualStudioCode -e
-		sudo winget install --id Python.Python.3.12 -e
+		sudo winget install --id=Python.Python.3.12 -e
 		sudo winget install --id=mlocati.GetText -e
 		sudo winget install --id=DBBrowserForSQLite.DBBrowserForSQLite -e
 		sudo winget install --id=DimitriVanHeesch.Doxygen -e
-		sudo winget install --id=OpenJS.NodeJS- -e
-		sudo winget install --id=Postman.Postman  -e
+		sudo winget install --id=OpenJS.NodeJS -e
+		sudo winget install --id=Postman.Postman -e
 		sudo winget install --id=MSYS2.MSYS2 -e
 		$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 		python -m pip install --upgrade pip
@@ -53,7 +53,13 @@ function Install-NotepadThemes {
 
 function Add-EnvironmentVariables {
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-    [System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\$env:UserName\OneDrive\Documents\Programming", "User")
+	$arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
+	if ($osArchitecture -eq 'Arm64') {
+		[System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\$env:UserName\OneDrive\Documents\Programming\arm64", "User")
+	}
+	else {
+		System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\$env:UserName\OneDrive\Documents\Programming\x64", "User")
+	}
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "BingSearchEnabled" -Value 0 -Type DWord
 }
 
@@ -62,7 +68,7 @@ function Add-PowerShellConfiguration {
     New-Item -Path $profilePath -Type File -Force
     echo "clear" | Out-File -FilePath $profilePath
     echo "fastfetch" | Out-File -Append -FilePath $profilePath
-    echo 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression' | Out-File -Append -FilePath $profilePath
+    echo "oh-my-posh init pwsh | Invoke-Expression" | Out-File -Append -FilePath $profilePath
 }
 
 function Install-WSL {
@@ -77,7 +83,13 @@ function Install-WSL {
 function Install-Vcpkg {
     $install = Read-Host -Prompt "Install vcpkg? (y/n) "
     if($install -eq "y" -or $install -eq "Y") {
-        [System.Environment]::SetEnvironmentVariable("VCPKG_DEFAULT_TRIPLET","x64-windows", "User")
+		$arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
+		if ($osArchitecture -eq 'Arm64') {
+			[System.Environment]::SetEnvironmentVariable("VCPKG_DEFAULT_TRIPLET","arm64-windows", "User")
+		}
+		else {
+			[System.Environment]::SetEnvironmentVariable("VCPKG_DEFAULT_TRIPLET","x64-windows", "User")
+		}
     	[System.Environment]::SetEnvironmentVariable("VCPKG_ROOT","C:\Users\$env:UserName\vcpkg", "User")
     	cd %HOMEPATH%
     	git clone "https://github.com/microsoft/vcpkg"
